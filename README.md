@@ -1,2 +1,2 @@
-# TimeClock
-Time Clock for eWay-CRM
+# Time Clock
+Time Clock for eWay-CRM.

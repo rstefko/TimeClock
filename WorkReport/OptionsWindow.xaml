@@ -1,0 +1,38 @@
+﻿<Window x:Class="TimeClock.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Height="300" Width="300" Loaded="Window_Loaded">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <Label.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="SteelBlue" Offset="1.0"/>
+                    <GradientStop Color="White" Offset="0.0"/>
+                </LinearGradientBrush>
+            </Label.Background>
+        </Label>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <CheckBox Name="cboAutoStart" Margin="5">Auto start timer when application starts</CheckBox>
+            <CheckBox Name="cboForceOwnWebService" Margin="5">Always use TimeClock web service settings</CheckBox>
+        </StackPanel>
+        
+        <Button Margin="5" Name="btnOK" Grid.Row="3" Grid.Column="1" IsDefault="True" Click="btnOK_Click">Save</Button>
+        <Button Margin="5" Name="btnCancel" Grid.Row="3" Grid.Column="2" IsCancel="True" Click="btnCancel_Click">Close</Button>
+
+    </Grid>
+</Window>
