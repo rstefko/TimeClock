@@ -12,5 +12,3 @@ Just use your mouse to start or stop counting by clicking the clock icon.
 At the end of the day right click the clock icon and select Commit from the menu. Review the records and click OK to upload them into the eWay-CRM database.
 
 ![timeclock_summary](Images/timeclock_summary.png)
-
-[Download Time Clock](http://apps.stefko.cz/TimeClock4/TimeClock.application)
