@@ -13,4 +13,4 @@ At the end of the day right click the clock icon and select Commit from the menu
 
 ![timeclock_summary](Images/timeclock_summary.png)
 
-[Download Time Clock](http://apps.stefko.cz/TimeClock4/TimeClock.application?classes=btn)
+<a href="http://apps.stefko.cz/TimeClock4/TimeClock.application" class="btn">Download Time Clock</a>
