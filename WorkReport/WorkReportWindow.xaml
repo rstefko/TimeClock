@@ -41,7 +41,7 @@
         <Label Margin="5" Grid.Column="0" Grid.Row="5">Note</Label>
 
         <TextBox Margin="5" Name="tbxSubject" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Path=Subject}"></TextBox>
-        <ComboBox Margin="5" Name="cboProject" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" SelectedValue="{Binding Path=Project}" Grid.Column="1" Grid.Row="2" IsEditable="True" Grid.ColumnSpan="3"></ComboBox>
+        <ComboBox Margin="5" Name="cboProject" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" SelectedValue="{Binding Path=Project}" Grid.Column="1" Grid.Row="2" IsEditable="True" Grid.ColumnSpan="3"></ComboBox>
         <Label Margin="5" Name="lblFrom" Grid.Column="3" Grid.Row="3" Content="{Binding Path=FromTime}"></Label>
         <Label Margin="5" Name="lblTo" Grid.Column="3" Grid.Row="4" Content="{Binding Path=ToTime}"></Label>
         <ComboBox Margin="5" Name="cboType" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" SelectedValue="{Binding Path=Type}" Grid.Column="1" Grid.Row="3" IsEditable="True"></ComboBox>
