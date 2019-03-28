@@ -100,30 +100,70 @@ namespace TimeClock.RemoteStore
                 .Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), x.Value<string>("En")));
         }
 
-        /// <summary>
-        /// Gets list of projects.
-        /// </summary>
-        public IEnumerable<BaseItem> GetProjects()
+        public IEnumerable<BaseItem> GetProjectsLeads()
         {
-            JObject projects = this.connection.CallMethod("GetProjects");
+            var projects = this.GetItems("Projects");
+            var leads = this.GetItems("Leads");
 
-            // TODO: Add customer or contact person before the project name
-            return ((JArray)projects["Data"])
-                .Where(x => !x.Value<bool>("IsLost") && !x.Value<bool>("IsCompleted"))
-                .Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), x.Value<string>("FileAs")));
+            var companyGuids = projects.Where(x => x.Value<string>("Companies_CustomerGuid") != null).Select(x => new Guid(x.Value<string>("Companies_CustomerGuid")))
+                .Union(leads.Where(x => x.Value<string>("Companies_CustomerGuid") != null).Select(x => new Guid(x.Value<string>("Companies_CustomerGuid"))));
+
+            var contactGuids = projects.Where(x => x.Value<string>("Contacts_ContactPersonGuid") != null).Select(x => new Guid(x.Value<string>("Contacts_ContactPersonGuid")))
+                .Union(leads.Where(x => x.Value<string>("Contacts_ContactPersonGuid") != null).Select(x => new Guid(x.Value<string>("Contacts_ContactPersonGuid"))));
+
+            var companies = this.GetItemGuidFileAsDictionary("Companies", companyGuids);
+            var contacts = this.GetItemGuidFileAsDictionary("Contacts", contactGuids);
+
+            return projects.Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts)))
+                .Concat(leads.Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts))))
+                .OrderBy(x => x.FileAs);
         }
 
-        /// <summary>
-        /// Gets list of leads.
-        /// </summary>
-        public IEnumerable<BaseItem> GetLeads()
+        private JArray GetItems(string folderName)
         {
-            JObject leads = this.connection.CallMethod("GetLeads");
-
-            // TODO: Add customer or contact person before the project name
-            return ((JArray)leads["Data"])
+            JObject items = this.connection.CallMethod($"Get{folderName}");
+            var itemGuids = ((JArray)items["Data"])
                 .Where(x => !x.Value<bool>("IsLost") && !x.Value<bool>("IsCompleted"))
-                .Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), x.Value<string>("FileAs")));
+                .Select(x => new Guid(x.Value<string>("ItemGUID")));
+
+            return ((JArray)this.connection.CallMethod($"Get{folderName}ByItemGuids", JObject.FromObject(new
+            {
+                itemGuids = new JArray(itemGuids),
+                includeForeignKeys = true,
+                includeRelations = false
+            }))["Data"]);
+        }
+
+        private string GetProjectFileAs(JToken project, Dictionary<string, string> companies, Dictionary<string, string> contacts)
+        {
+            string companyGuid = project.Value<string>("Companies_CustomerGuid");
+            string contactGuid = project.Value<string>("Contacts_ContactPersonGuid");
+            string projectFileAs = project.Value<string>("FileAs");
+
+            string companyFileAs = project.Value<string>("Customer");
+            string contactFileAs = project.Value<string>("ContactPerson");
+            if (!string.IsNullOrEmpty(companyFileAs) || (!string.IsNullOrEmpty(companyGuid) && companies.TryGetValue(companyGuid, out companyFileAs)))
+            {
+                return $"{companyFileAs}, {projectFileAs}";
+            }
+            else if (!string.IsNullOrEmpty(contactFileAs) || (!string.IsNullOrEmpty(contactGuid) && contacts.TryGetValue(contactGuid, out contactFileAs)))
+            {
+                return $"{contactFileAs}, {projectFileAs}";
+            }
+
+            return projectFileAs;
+        }
+
+        private Dictionary<string, string> GetItemGuidFileAsDictionary(string folderName, IEnumerable<Guid> guids)
+        {
+            var companies = this.connection.CallMethod($"Get{folderName}ByItemGuids", JObject.FromObject(new
+            {
+                itemGuids = new JArray(guids),
+                includeForeignKeys = false,
+                includeRelations = false
+            }));
+
+            return ((JArray)companies["Data"]).ToDictionary(x => x.Value<string>("ItemGUID"), y => y.Value<string>("FileAs"));
         }
     }
 }

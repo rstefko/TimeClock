@@ -10,7 +10,7 @@ namespace TimeClock.RemoteStore
     public static class Items
     {
         private static object itemsLock = new object();
-        private static IEnumerable<BaseItem> _projects, _leads, _projectsLeads;
+        private static IEnumerable<BaseItem> _projectsLeads;
         private static IEnumerable<BaseItem> _workReportTypes;
         private static Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
 
@@ -28,50 +28,10 @@ namespace TimeClock.RemoteStore
                 {
                     if (_projectsLeads == null)
                     {
-                        _projectsLeads = Projects.Concat(Leads);
+                        _projectsLeads = ItemStore.Instance.GetProjectsLeads();
                     }
 
                     return _projectsLeads;
-                }
-            }
-        }
-
-        public static IEnumerable<BaseItem> Projects
-        {
-            get
-            {
-                if (_projects != null)
-                    return _projects;
-
-                lock (itemsLock)
-                {
-                    if (_projects == null)
-                    {
-                        // Get projects
-                        _projects = ItemStore.Instance.GetProjects();
-                    }
-
-                    return _projects;
-                }
-            }
-        }
-
-        public static IEnumerable<BaseItem> Leads
-        {
-            get
-            {
-                if (_leads != null)
-                    return _leads;
-
-                lock (itemsLock)
-                {
-                    if (_leads == null)
-                    {
-                        // Get leads
-                        _leads = ItemStore.Instance.GetLeads();
-                    }
-
-                    return _leads;
                 }
             }
         }
