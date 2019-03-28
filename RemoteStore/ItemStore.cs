@@ -64,7 +64,7 @@ namespace TimeClock.RemoteStore
                 }));
 
                 var userItem = ((JArray)users["Data"]).Single();
-                this.User = new BaseItem(new Guid(userItem.Value<string>("ItemGUID")), userItem.Value<string>("FileAs"));
+                this.User = new BaseItem("Users", new Guid(userItem.Value<string>("ItemGUID")), userItem.Value<string>("FileAs"));
             }
             catch (LoginException)
             {
@@ -97,7 +97,7 @@ namespace TimeClock.RemoteStore
 
             return ((JArray)enumValues["Data"])
                 .Where(x => x.Value<string>("EnumTypeName") == "WorkReportType")
-                .Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), x.Value<string>("En")));
+                .Select(x => new BaseItem("EnumValues", new Guid(x.Value<string>("ItemGUID")), x.Value<string>("En")));
         }
 
         public IEnumerable<BaseItem> GetProjectsLeads()
@@ -114,9 +114,37 @@ namespace TimeClock.RemoteStore
             var companies = this.GetItemGuidFileAsDictionary("Companies", companyGuids);
             var contacts = this.GetItemGuidFileAsDictionary("Contacts", contactGuids);
 
-            return projects.Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts)))
-                .Concat(leads.Select(x => new BaseItem(new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts))))
+            return projects.Select(x => new BaseItem("Projects", new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts)))
+                .Concat(leads.Select(x => new BaseItem("Leads", new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts))))
                 .OrderBy(x => x.FileAs);
+        }
+
+        public void SaveWorkReport(WorkReport item, KeyValuePair<string, string>? additionalField)
+        {
+            JObject additionalFields = new JObject();
+            if (additionalField != null)
+            {
+                additionalFields.Add(additionalField.Value.Key, item.ReservedField);
+            }
+
+            this.connection.CallMethod("SaveWorkReport", JObject.FromObject(new
+            {
+                transmitObject = JObject.FromObject(new
+                {
+                    ItemGUID = item.ItemGuid,
+                    ItemVersion = 1,
+                    Subject = item.Subject,
+                    From = item.FromTime.ToString("u"),
+                    To = item.ToTime.ToString("u"),
+                    TypeEn = item.Type,
+                    Projects_ProjectGuid = (item.ProjectItem.FolderName ?? "Projects") == "Projects" ? (Guid?)item.Project : null,
+                    Leads_LeadGuid = item.ProjectItem.FolderName == "Leads" ? (Guid?)item.Project : null,
+                    Users_PersonGuid = item.UserItem.ItemGuid,
+                    Note = item.Note,
+                    AdditionalFields = additionalFields
+                }),
+                dieOnItemConflict = false
+            }));
         }
 
         private JArray GetItems(string folderName)

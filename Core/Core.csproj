@@ -95,7 +95,6 @@
     <Compile Include="Data\Binding\Adapters\MetaData\DelegatePropertyWriter.cs" />
     <Compile Include="Data\Binding\Adapters\MetaData\TypeMetaData.cs" />
     <Compile Include="Data\Binding\Adapters\MetaData\TypeMetaDataRepository.cs" />
-    <Compile Include="Data\WorkReport.cs" />
     <Compile Include="Design.cs" />
     <Compile Include="GUI\UnhandledExceptionDialog.cs">
       <SubType>Form</SubType>

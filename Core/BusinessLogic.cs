@@ -259,7 +259,7 @@ namespace TimeClock.Core
                 // Get time from work reports
                 foreach (EditableWorkReport item in this.workReports)
                 {
-                    TimeClock.Core.Data.WorkReport report = item.WrappedInstance;
+                    RemoteStore.WorkReport report = item.WrappedInstance;
 
                     if (report.FromTime.Year == DateTime.Today.Year && report.FromTime.DayOfYear == DateTime.Today.DayOfYear)
                     {
@@ -434,7 +434,7 @@ namespace TimeClock.Core
 
         EditableWorkReport CreateEditableWorkReport(DateTime startTime)
         {
-            Core.Data.WorkReport item = new Core.Data.WorkReport();
+            RemoteStore.WorkReport item = new RemoteStore.WorkReport();
             item.FromTime = startTime;
 
             // Insert item into the workreports list
