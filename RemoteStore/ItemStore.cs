@@ -154,12 +154,7 @@ namespace TimeClock.RemoteStore
                 .Where(x => !x.Value<bool>("IsLost") && !x.Value<bool>("IsCompleted"))
                 .Select(x => new Guid(x.Value<string>("ItemGUID")));
 
-            return ((JArray)this.connection.CallMethod($"Get{folderName}ByItemGuids", JObject.FromObject(new
-            {
-                itemGuids = new JArray(itemGuids),
-                includeForeignKeys = true,
-                includeRelations = false
-            }))["Data"]);
+            return this.connection.GetItemsByItemGuids($"Get{folderName}ByItemGuids", itemGuids, true);
         }
 
         private string GetProjectFileAs(JToken project, Dictionary<string, string> companies, Dictionary<string, string> contacts)
@@ -184,14 +179,9 @@ namespace TimeClock.RemoteStore
 
         private Dictionary<string, string> GetItemGuidFileAsDictionary(string folderName, IEnumerable<Guid> guids)
         {
-            var companies = this.connection.CallMethod($"Get{folderName}ByItemGuids", JObject.FromObject(new
-            {
-                itemGuids = new JArray(guids),
-                includeForeignKeys = false,
-                includeRelations = false
-            }));
+            var companies = this.connection.GetItemsByItemGuids($"Get{folderName}ByItemGuids", guids);
 
-            return ((JArray)companies["Data"]).ToDictionary(x => x.Value<string>("ItemGUID"), y => y.Value<string>("FileAs"));
+            return companies.ToDictionary(x => x.Value<string>("ItemGUID"), y => y.Value<string>("FileAs"));
         }
     }
 }

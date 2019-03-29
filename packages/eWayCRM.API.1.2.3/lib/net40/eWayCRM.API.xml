@@ -155,6 +155,16 @@
             <param name="input">Password to be hashed.</param>
             <returns>Hash for usage in <see cref="T:eWayCRM.API.Connection"/> constructor.</returns>
         </member>
+        <member name="M:eWayCRM.API.Connection.GetItemsByItemGuids(System.String,System.Collections.Generic.IEnumerable{System.Guid},System.Boolean,System.Boolean)">
+            <summary>
+            Calls Get[FolderName]ByItemGuids with chunking.
+            </summary>
+            <param name="methodName">Name of the method.</param>
+            <param name="itemGuids">Identifiers of items.</param>
+            <param name="includeForeignKeys">If set to True, the JSON result will contain foreign keys/items fields made from the 1:N relations as well.</param>
+            <param name="includeRelations">If set to True, the JSON result will contain the relations as well.</param>
+            <returns></returns>
+        </member>
         <member name="T:eWayCRM.API.Exceptions.ClientMachineIdentifierDeterminationException">
             <summary>
             Thrown when the library was unable to determine th client machine unique identifier automatically.
