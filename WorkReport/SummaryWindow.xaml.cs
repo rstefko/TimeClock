@@ -117,7 +117,7 @@ namespace TimeClock
                     if (!item.WrappedInstance.IsValid)
                         continue;
 
-                    TimeClock.Core.Data.WorkReport.SaveWorkReport(item.WrappedInstance);
+                    RemoteStore.WorkReport.SaveWorkReport(item.WrappedInstance);
 
                     // Remove successfully saved work report from the list
                     this.workReports.RemoveAt(i);

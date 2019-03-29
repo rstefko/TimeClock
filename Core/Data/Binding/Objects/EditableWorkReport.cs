@@ -8,13 +8,13 @@ using TimeClock.Core.Data.Binding.Adapters;
 
 namespace TimeClock.Core.Data.Binding.Objects
 {
-    public class EditableWorkReport : EditableAdapter<Core.Data.WorkReport>
+    public class EditableWorkReport : EditableAdapter<RemoteStore.WorkReport>
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="item"></param>
-        public EditableWorkReport(Core.Data.WorkReport item)
+        public EditableWorkReport(RemoteStore.WorkReport item)
             : base(item)
         {
 

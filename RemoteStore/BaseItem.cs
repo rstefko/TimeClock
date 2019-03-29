@@ -15,19 +15,22 @@ namespace TimeClock.RemoteStore
             this.ItemGuid = Guid.NewGuid();
         }
 
-        public BaseItem(string fileAs)
+        public BaseItem(string folderName, string fileAs)
             : this()
         {
+            this.FolderName = folderName;
             this.FileAs = fileAs;
         }
 
-        public BaseItem(Guid itemGuid)
+        public BaseItem(string folderName, Guid itemGuid)
         {
+            this.FolderName = folderName;
             this.ItemGuid = itemGuid;
         }
 
-        public BaseItem(Guid itemGuid, string fileAs)
+        public BaseItem(string folderName, Guid itemGuid, string fileAs)
         {
+            this.FolderName = folderName;
             this.ItemGuid = itemGuid;
             this.FileAs = fileAs;
         }
@@ -39,6 +42,12 @@ namespace TimeClock.RemoteStore
         }
 
         public string FileAs
+        {
+            get;
+            set;
+        }
+
+        public string FolderName
         {
             get;
             set;

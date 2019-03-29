@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using TimeClock.Core.Data.Binding.Objects;
+using TimeClock.RemoteStore;
 
 namespace TimeClock.Core.Xml
 {

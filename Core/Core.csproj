@@ -53,8 +53,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eWayCRM.API, Version=1.2.1.0, Culture=neutral, PublicKeyToken=57e4eee64106844e, processorArchitecture=MSIL">
-      <HintPath>..\packages\eWayCRM.API.1.2.1\lib\net40\eWayCRM.API.dll</HintPath>
+    <Reference Include="eWayCRM.API, Version=1.2.2.0, Culture=neutral, PublicKeyToken=57e4eee64106844e, processorArchitecture=MSIL">
+      <HintPath>..\packages\eWayCRM.API.1.2.2\lib\net40\eWayCRM.API.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>.\log4net.dll</HintPath>
@@ -95,7 +95,6 @@
     <Compile Include="Data\Binding\Adapters\MetaData\DelegatePropertyWriter.cs" />
     <Compile Include="Data\Binding\Adapters\MetaData\TypeMetaData.cs" />
     <Compile Include="Data\Binding\Adapters\MetaData\TypeMetaDataRepository.cs" />
-    <Compile Include="Data\WorkReport.cs" />
     <Compile Include="Design.cs" />
     <Compile Include="GUI\UnhandledExceptionDialog.cs">
       <SubType>Form</SubType>

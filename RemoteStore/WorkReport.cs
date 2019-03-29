@@ -7,18 +7,19 @@ using System.Xml.Serialization;
 using TimeClock.RemoteStore;
 using Newtonsoft.Json.Linq;
 
-namespace TimeClock.Core.Data
+namespace TimeClock.RemoteStore
 {
     [Serializable]
-    public class WorkReport : RemoteStore.BaseItem
+    public class WorkReport : BaseItem
     {
         private string subject;
         private DateTime fromTime;
         private DateTime toTime;
 
         public WorkReport()
+            : base()
         {
-            UserItem = RemoteStore.ItemStore.Instance.User;
+            UserItem = ItemStore.Instance.User;
         }
 
         public WorkReport(string subject, Guid project, Guid type,
@@ -102,18 +103,14 @@ namespace TimeClock.Core.Data
         {
             // Try to find item
             var item = items.Where(x => x.ItemGuid == itemGuid).SingleOrDefault();
-            if (item != null)
-            {
-                return item;
-            }
-            else
-            {
-                return new BaseItem(Guid.Empty);
-            }
+            if (item == null)
+                return null;
+
+            return item;
         }
 
         [XmlElement(ElementName="Type")]
-        public RemoteStore.BaseItem TypeItem
+        public BaseItem TypeItem
         {
             get;
             set;
@@ -134,14 +131,14 @@ namespace TimeClock.Core.Data
         }
 
         [XmlElement(ElementName="Project")]
-        public RemoteStore.BaseItem ProjectItem
+        public BaseItem ProjectItem
         {
             get;
             set;
         }
 
         [XmlElement(ElementName = "User")]
-        public RemoteStore.BaseItem UserItem
+        public BaseItem UserItem
         {
             get;
             set;
@@ -164,7 +161,7 @@ namespace TimeClock.Core.Data
         /// <returns>True if everything went ok</returns>
         public static void SaveWorkReport(WorkReport item)
         {
-            // TODO: Add Save logic
+            ItemStore.Instance.SaveWorkReport(item, Items.ReservedField);
         }
 
         private DateTime GetSmallDateTime(DateTime value)
