@@ -1,5 +1,5 @@
 # Time Clock
-Time Clock is a Windows application which helps users fill their time sheets in [eWay-CRM](https://www.eway-crm.com/).
+[Time Clock](http://timeclock.cz/) is a Windows application which helps users fill their time sheets in [eWay-CRM](https://www.eway-crm.com/).
 
 It runs in Windows system tray.
 
