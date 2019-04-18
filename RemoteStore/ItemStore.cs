@@ -136,6 +136,7 @@ namespace TimeClock.RemoteStore
                     Subject = item.Subject,
                     From = item.FromTime.ToStringForApi(),
                     To = item.ToTime.ToStringForApi(),
+                    Duration = Math.Round((item.ToTime.Subtract(item.FromTime)).TotalHours, 2),
                     TypeEn = item.Type,
                     Projects_ProjectGuid = (item.ProjectItem.FolderName ?? "Projects") == "Projects" ? (Guid?)item.Project : null,
                     Leads_LeadGuid = item.ProjectItem.FolderName == "Leads" ? (Guid?)item.Project : null,
