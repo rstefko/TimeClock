@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Net;
 using System.Windows;
 using System.Threading;
+using System.Threading.Tasks;
 
 using TimeClock.Core.Data.Binding.Objects;
 using eWayCRM.API;
@@ -43,7 +44,7 @@ namespace TimeClock.Core
         /// <summary>
         /// Executes application initialization logic.
         /// </summary>
-        public void Initialize()
+        public async void Initialize()
         {
 #if  (!DEBUG)
             // Allow just one instance.
@@ -59,6 +60,15 @@ namespace TimeClock.Core
                 this.Shutdown();
                 return;
             }
+
+            this.LoadingStarted?.Invoke(this, EventArgs.Empty);
+
+            await Task.Run(() =>
+            {
+                this.PreloadData();
+            });
+
+            this.LoadingFinished?.Invoke(this, EventArgs.Empty);
 
             this.workReports = Core.Xml.History.LoadHistory();
 
@@ -88,11 +98,6 @@ namespace TimeClock.Core
                     this.StartCounting();
                 }
             }
-
-            ThreadPool.QueueUserWorkItem(x =>
-            {
-                this.PreloadData();
-            });
         }
 
         private void PreloadData()
@@ -124,10 +129,7 @@ namespace TimeClock.Core
 
         private void Shutdown()
         {
-            if (this.ShutdownApplication != null)
-            {
-                this.ShutdownApplication(this, new ShutdownEventArgs());
-            }
+            this.ShutdownApplication?.Invoke(this, new ShutdownEventArgs());
         }
 
         private void CheckForUnfinishedWorkReport()
@@ -500,6 +502,16 @@ namespace TimeClock.Core
         /// Event called when options window should be displayed.
         /// </summary>
         public event EventHandler OptionsShow;
+
+        /// <summary>
+        /// Event called when application start to load data from API.
+        /// </summary>
+        public event EventHandler LoadingStarted;
+
+        /// <summary>
+        /// Event called when application stops loading data from API.
+        /// </summary>
+        public event EventHandler LoadingFinished;
 
         /// <summary>
         /// Event arguments with EditableWorkReport list.

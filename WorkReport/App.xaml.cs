@@ -23,6 +23,7 @@ namespace TimeClock
     public partial class App : Application
     {
         private BusinessLogic businessLogic = new BusinessLogic();
+        private SplashScreen splashScreen = new SplashScreen("Resources/Splash.png");
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -32,8 +33,20 @@ namespace TimeClock
             this.businessLogic.NewWorkReportShow += new EventHandler<BusinessLogic.WorkReportEventArgs>(businessLogic_NewWorkReportShow);
             this.businessLogic.StartCountingRequested += new EventHandler<BusinessLogic.StartCountingEventArgs>(businessLogic_StartCountingRequested);
             this.businessLogic.OptionsShow += new EventHandler(businessLogic_OptionsShow);
+            this.businessLogic.LoadingFinished += businessLogic_LoadingFinished;
+            this.businessLogic.LoadingStarted += businessLogic_LoadingStarted;
 
             this.businessLogic.Initialize();
+        }
+
+        private void businessLogic_LoadingStarted(object sender, EventArgs e)
+        {
+            this.splashScreen.Show(false, true);
+        }
+
+        private void businessLogic_LoadingFinished(object sender, EventArgs e)
+        {
+            this.splashScreen.Close(new TimeSpan(0, 0, 1));
         }
 
         void businessLogic_OptionsShow(object sender, EventArgs e)
