@@ -10,6 +10,16 @@
             This class helps to manage the connection to the eWay-CRM API.
             </summary>
         </member>
+        <member name="P:eWayCRM.API.Connection.UserGuid">
+            <summary>
+            Gets the user Guid.
+            </summary>
+        </member>
+        <member name="P:eWayCRM.API.Connection.Version">
+            <summary>
+            Gets the API version.
+            </summary>
+        </member>
         <member name="M:eWayCRM.API.Connection.#ctor(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:eWayCRM.API.Connection" /> class.
@@ -73,6 +83,11 @@
             <exception cref="T:eWayCRM.API.Exceptions.ResponseException">
             Method calling ended up badly.
             </exception>
+        </member>
+        <member name="M:eWayCRM.API.Connection.EnsureLogin">
+            <summary>
+            Forces LogIn method to be called if it was not called before.
+            </summary>
         </member>
         <member name="M:eWayCRM.API.Connection.UploadFile(System.String,System.Guid@,System.String)">
             <summary>

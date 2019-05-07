@@ -56,8 +56,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eWayCRM.API, Version=1.2.3.0, Culture=neutral, PublicKeyToken=57e4eee64106844e, processorArchitecture=MSIL">
-      <HintPath>..\packages\eWayCRM.API.1.2.3\lib\net40\eWayCRM.API.dll</HintPath>
+    <Reference Include="eWayCRM.API, Version=1.2.4.0, Culture=neutral, PublicKeyToken=57e4eee64106844e, processorArchitecture=MSIL">
+      <HintPath>..\packages\eWayCRM.API.1.2.4\lib\net40\eWayCRM.API.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>.\log4net.dll</HintPath>

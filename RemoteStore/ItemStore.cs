@@ -54,12 +54,13 @@ namespace TimeClock.RemoteStore
             try
             {
                 this.connection = new Connection(server, userName, password, version);
+                connection.EnsureLogin();
 
                 JObject users = this.connection.CallMethod("SearchUsers", JObject.FromObject(new
                 {
                     transmitObject = new
                     {
-                        Username = userName
+                        ItemGUID = connection.UserGuid
                     }
                 }));
 
@@ -93,11 +94,24 @@ namespace TimeClock.RemoteStore
         /// <returns></returns>
         public IEnumerable<BaseItem> GetWorkReportTypes()
         {
-            JObject enumValues = this.connection.CallMethod("GetEnumValues");
+            IEnumerable<JToken> enumValues;
+            if (this.connection.Version > new Version(5, 4, 1))
+            {
+                enumValues = ((JArray)this.connection.CallMethod("SearchEnumValues", JObject.FromObject(new
+                {
+                    transmitObject = new
+                    {
+                        EnumTypeName = "WorkReportType"
+                    }
+                }))["Data"]);
 
-            return ((JArray)enumValues["Data"])
-                .Where(x => x.Value<string>("EnumTypeName") == "WorkReportType")
-                .Select(x => new BaseItem("EnumValues", new Guid(x.Value<string>("ItemGUID")), x.Value<string>("En")));
+            }
+            else
+            {
+                enumValues = ((JArray)this.connection.CallMethod("GetEnumValues")["Data"]).Where(x => x.Value<string>("EnumTypeName") == "WorkReportType");
+            }
+
+            return enumValues.Select(x => new BaseItem("EnumValues", new Guid(x.Value<string>("ItemGUID")), x.Value<string>("En")));
         }
 
         public IEnumerable<BaseItem> GetProjectsLeads()
