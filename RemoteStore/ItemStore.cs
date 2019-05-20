@@ -95,7 +95,7 @@ namespace TimeClock.RemoteStore
         public IEnumerable<BaseItem> GetWorkReportTypes()
         {
             IEnumerable<JToken> enumValues;
-            if (this.connection.Version > new Version(5, 4, 1))
+            if (this.connection.Version > new Version(5, 4, 0, 121))
             {
                 enumValues = ((JArray)this.connection.CallMethod("SearchEnumValues", JObject.FromObject(new
                 {
