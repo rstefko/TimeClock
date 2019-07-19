@@ -102,6 +102,11 @@ namespace TimeClock
             login.UserName = e.UserName;
             login.Server = e.WebService;
 
+            if (!e.AllowRememberPassword)
+            {
+                login.HideRememberPasswordControl();
+            }
+
             if (login.ShowDialog().Value)
             {
                 e.Handled = true;

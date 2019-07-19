@@ -49,11 +49,11 @@ namespace TimeClock.RemoteStore
         /// <param name="password">The password.</param>
         /// <param name="version">The version.</param>
         /// <returns></returns>
-        public bool LogIn(string server, string userName, string password, string version)
+        public bool LogIn(string server, string userName, string password, string version, bool useDefaultCredentials = false, NetworkCredential networkCredential = null)
         {
             try
             {
-                this.connection = new Connection(server, userName, password, version);
+                this.connection = new Connection(server, userName, password, version, useDefaultCredentials: useDefaultCredentials, networkCredential: networkCredential);
                 connection.EnsureLogin();
 
                 JObject users = this.connection.CallMethod("SearchUsers", JObject.FromObject(new

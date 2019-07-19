@@ -48,6 +48,15 @@ namespace TimeClock
             get { return this.chkRememberPassword.IsChecked ?? false; }
         }
 
+        /// <summary>
+        /// Hides the remember password control.
+        /// </summary>
+        /// <returns></returns>
+        public void HideRememberPasswordControl()
+        {
+            this.chkRememberPassword.Visibility = Visibility.Hidden;
+        }
+
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

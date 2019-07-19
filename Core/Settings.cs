@@ -213,7 +213,14 @@ namespace TimeClock.Core
                 if (key == null)
                     key = globalKey.CreateSubKey(path);
 
-                key.SetValue(settingName, settingValue);
+                if (settingValue != null)
+                {
+                    key.SetValue(settingName, settingValue);
+                }
+                else
+                {
+                    key.DeleteValue(settingName, false);
+                }
             }
             catch (Exception ex)
             {

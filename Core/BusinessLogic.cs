@@ -586,6 +586,12 @@ namespace TimeClock.Core
                 set;
             }
 
+            public bool AllowRememberPassword
+            {
+                get;
+                set;
+            }
+
             /// <summary>
             /// Default constructor.
             /// </summary>
@@ -599,10 +605,7 @@ namespace TimeClock.Core
             /// <summary>
             /// Constructor without parameters.
             /// </summary>
-            public LoginEventArgs()
-            {
-
-            }
+            public LoginEventArgs() { }
         }
 
         /// <summary>
@@ -735,10 +738,10 @@ namespace TimeClock.Core
         {
             var loginEventArgs = new LoginEventArgs();
             bool result = false;
-            string webService = null;
 
             // Try to login using credentials from registry.
-            webService = Settings.TryGetUserSetting("Server", null) as string;
+            string webService = Settings.TryGetUserSetting("Server", null) as string;
+            bool isHttpAuthentification = false;
 
             if (webService != null)
             {
@@ -749,26 +752,30 @@ namespace TimeClock.Core
                 {
                     try
                     {
-                        result = SafeRemoteStoreCaller.TryLogIn(
+                        result = RemoteStore.ItemStore.Instance.LogIn(
                             webService,
                             userName,
                             password,
-                            Settings.ClientVersion
+                            Settings.ClientVersion,
+                            useDefaultCredentials: webService.StartsWith("https://") && password == null
                             );
                     }
                     catch (WebException ex)
                     {
-                        System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)ex.Response;
+                        HttpWebResponse response = (HttpWebResponse)ex.Response;
 
                         // When the exception is 401 (Unauthorized) -> display login dialog
-                        if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized)
+                        if (response.StatusCode != HttpStatusCode.Unauthorized)
                             throw;
+
+                        isHttpAuthentification = true;
                     }
 
                     if (result)
                         return true;
                 }
 
+                loginEventArgs.AllowRememberPassword = !isHttpAuthentification;
                 loginEventArgs.UserName = userName;
                 loginEventArgs.WebService = webService;
             }
@@ -780,12 +787,43 @@ namespace TimeClock.Core
 
                 if (loginEventArgs.Handled)
                 {
-                    result = SafeRemoteStoreCaller.TryLogIn(
-                        loginEventArgs.WebService,
-                        loginEventArgs.UserName,
-                        Connection.HashPassword(loginEventArgs.Password),
-                        Settings.ClientVersion
-                        );
+                    bool canSavePassword = true;
+                    try
+                    {
+                        if (!isHttpAuthentification)
+                        {
+                            result = RemoteStore.ItemStore.Instance.LogIn(
+                                loginEventArgs.WebService,
+                                loginEventArgs.UserName,
+                                Connection.HashPassword(loginEventArgs.Password),
+                                Settings.ClientVersion
+                                );
+                        }
+                    }
+                    catch (WebException ex)
+                    {
+                        if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            isHttpAuthentification = true;
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+
+                    if (isHttpAuthentification)
+                    {
+                        result = RemoteStore.ItemStore.Instance.LogIn(
+                            loginEventArgs.WebService,
+                            loginEventArgs.UserName,
+                            null,
+                            Settings.ClientVersion,
+                            networkCredential: new NetworkCredential(loginEventArgs.UserName, loginEventArgs.Password)
+                            );
+
+                        canSavePassword = false;
+                    }
 
                     if (!result)
                     {
@@ -797,8 +835,14 @@ namespace TimeClock.Core
                         Settings.SaveTimeClockUserSetting("Server", loginEventArgs.WebService);
                         Settings.SaveTimeClockUserSetting("Username", loginEventArgs.UserName);
 
-                        if (loginEventArgs.RememberPassword)
+                        if (loginEventArgs.RememberPassword && canSavePassword)
+                        {
                             Settings.SaveTimeClockUserSetting("Password", Connection.HashPassword(loginEventArgs.Password));
+                        }
+                        else
+                        {
+                            Settings.SaveTimeClockUserSetting("Password", null);
+                        }
 
                         return true;
                     }
