@@ -223,5 +223,17 @@
             <param name="dateTime">The date time.</param>
             <returns></returns>
         </member>
+        <member name="T:eWayCRM.API.Threading.Mutex">
+            <summary>
+            Class for Mutex management.
+            </summary>
+        </member>
+        <member name="M:eWayCRM.API.Threading.Mutex.GetNamedMutex(System.String)">
+            <summary>
+            Gets instance of the named Mutex.
+            </summary>
+            <param name="name">Name of the mutex.</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
