@@ -48,12 +48,14 @@ namespace TimeClock.RemoteStore
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <param name="version">The version.</param>
+        /// <param name="accessToken">The access token.</param>
         /// <returns></returns>
-        public bool LogIn(string server, string userName, string password, string version, bool useDefaultCredentials = false, NetworkCredential networkCredential = null)
+        public bool LogIn(string server, string userName, string password, string version, bool useDefaultCredentials = false, NetworkCredential networkCredential = null,
+            string accessToken = null)
         {
             try
             {
-                this.connection = new Connection(server, userName, password, version, useDefaultCredentials: useDefaultCredentials, networkCredential: networkCredential);
+                this.connection = new Connection(server, userName, password, version, useDefaultCredentials: useDefaultCredentials, networkCredential: networkCredential, accessToken: accessToken);
                 connection.EnsureLogin();
 
                 JObject users = this.connection.CallMethod("SearchUsers", JObject.FromObject(new
@@ -66,6 +68,10 @@ namespace TimeClock.RemoteStore
 
                 var userItem = ((JArray)users["Data"]).Single();
                 this.User = new BaseItem("Users", new Guid(userItem.Value<string>("ItemGUID")), userItem.Value<string>("FileAs"));
+            }
+            catch (OAuthRequiredException)
+            {
+                throw;
             }
             catch (LoginException)
             {

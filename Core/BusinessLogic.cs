@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 using TimeClock.Core.Data.Binding.Objects;
 using eWayCRM.API;
+using eWayCRM.API.Exceptions;
 
 namespace TimeClock.Core
 {
@@ -586,7 +587,28 @@ namespace TimeClock.Core
                 set;
             }
 
+            /// <summary>
+            /// Indicates whether user wants to remember his password.
+            /// </summary>
             public bool AllowRememberPassword
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            /// Indicates whether OAuth 2.0 is used.
+            /// </summary>
+            public bool UseOAuth
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            /// Gets or sets the access token.
+            /// </summary>
+            public string AccessToken
             {
                 get;
                 set;
@@ -757,12 +779,19 @@ namespace TimeClock.Core
                             userName,
                             password,
                             Settings.ClientVersion,
-                            useDefaultCredentials: webService.StartsWith("https://") && password == null
+                            useDefaultCredentials: webService.StartsWith("https://") && password == null,
+                            accessToken: Settings.AccessToken
                             );
+                    }
+                    catch (OAuthRequiredException)
+                    {
+                        loginEventArgs.UseOAuth = true;
                     }
                     catch (WebException ex)
                     {
                         HttpWebResponse response = (HttpWebResponse)ex.Response;
+                        if (response == null)
+                            throw;
 
                         // When the exception is 401 (Unauthorized) -> display login dialog
                         if (response.StatusCode != HttpStatusCode.Unauthorized)
@@ -795,8 +824,9 @@ namespace TimeClock.Core
                             result = RemoteStore.ItemStore.Instance.LogIn(
                                 loginEventArgs.WebService,
                                 loginEventArgs.UserName,
-                                Connection.HashPassword(loginEventArgs.Password),
-                                Settings.ClientVersion
+                                loginEventArgs.Password == null ? null : Connection.HashPassword(loginEventArgs.Password),
+                                Settings.ClientVersion,
+                                accessToken: loginEventArgs.AccessToken
                                 );
                         }
                     }

@@ -10,13 +10,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TimeClock.Interfaces;
 
 namespace TimeClock
 {
     /// <summary>
     /// Interaction logic for LoginDialog.xaml
     /// </summary>
-    public partial class LoginDialog : Window
+    public partial class LoginDialog : Window, ILoginDialog
     {
         public LoginDialog()
         {
@@ -47,6 +48,8 @@ namespace TimeClock
         {
             get { return this.chkRememberPassword.IsChecked ?? false; }
         }
+
+        public string AccessToken => null;
 
         /// <summary>
         /// Hides the remember password control.

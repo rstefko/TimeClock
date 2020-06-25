@@ -85,6 +85,15 @@ namespace TimeClock.Core
         }
 
         /// <summary>
+        /// Gets or sets the access token.
+        /// </summary>
+        public static string AccessToken
+        {
+            get { return (string)GetTimeClockUserSetting("AccessToken", null); }
+            set { SaveTimeClockUserSetting("AccessToken", value); }
+        }
+
+        /// <summary>
         /// Get a setting of the user.
         /// </summary>
         /// <param name="settingName">Name of the setting.</param>

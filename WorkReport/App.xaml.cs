@@ -14,6 +14,7 @@ using TimeClock.Core.Data.Binding.Objects;
 using TimeClock.Core;
 using TimeClock.Helpers;
 using eWayCRM.API.Exceptions;
+using TimeClock.Interfaces;
 
 namespace TimeClock
 {
@@ -98,23 +99,33 @@ namespace TimeClock
 
         void businessLogic_LoginShow(object sender, BusinessLogic.LoginEventArgs e)
         {
-            LoginDialog login = new LoginDialog();
-            login.UserName = e.UserName;
-            login.Server = e.WebService;
+            ILoginDialog loginDialog;
+            if (e.UseOAuth)
+            {
+                loginDialog = new OAuthLoginDialog();
+            }
+            else
+            {
+                loginDialog = new LoginDialog();
+            }
+
+            loginDialog.UserName = e.UserName;
+            loginDialog.Server = e.WebService;
 
             if (!e.AllowRememberPassword)
             {
-                login.HideRememberPasswordControl();
+                loginDialog.HideRememberPasswordControl();
             }
 
-            if (login.ShowDialog().Value)
+            if (loginDialog.ShowDialog().Value)
             {
                 e.Handled = true;
 
-                e.RememberPassword = login.RememberPassword;
-                e.WebService = login.Server;
-                e.UserName = login.UserName;
-                e.Password = login.Password;
+                e.RememberPassword = loginDialog.RememberPassword;
+                e.WebService = loginDialog.Server;
+                e.UserName = loginDialog.UserName;
+                e.Password = loginDialog.Password;
+                e.AccessToken = loginDialog.AccessToken;
             }
         }
 
