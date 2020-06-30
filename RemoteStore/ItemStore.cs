@@ -7,6 +7,9 @@ using System.Net;
 using eWayCRM.API;
 using eWayCRM.API.Exceptions;
 using Newtonsoft.Json.Linq;
+using eWayCRM.API.Net;
+using System.IO;
+using System.Xml;
 
 namespace TimeClock.RemoteStore
 {

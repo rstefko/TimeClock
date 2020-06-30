@@ -18,6 +18,8 @@ namespace TimeClock.Interfaces
 
         bool RememberPassword { get; }
 
+        bool UseLegacyLogin { get; }
+
         void HideRememberPasswordControl();
 
         bool? ShowDialog();

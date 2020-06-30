@@ -51,6 +51,8 @@ namespace TimeClock
 
         public string AccessToken => null;
 
+        public bool UseLegacyLogin => false;
+
         /// <summary>
         /// Hides the remember password control.
         /// </summary>

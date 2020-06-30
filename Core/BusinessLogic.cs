@@ -750,10 +750,7 @@ namespace TimeClock.Core
             // Stop counting if it is running.
             this.StopCounting();
 
-            if (this.SummaryShow != null)
-            {
-                this.SummaryShow(this, new WorkReportsEventArgs(this.workReports));
-            }
+            this.SummaryShow?.Invoke(this, new WorkReportsEventArgs(this.workReports));
         }
 
         private bool LogIn()
@@ -807,6 +804,10 @@ namespace TimeClock.Core
                 loginEventArgs.AllowRememberPassword = !isHttpAuthentification;
                 loginEventArgs.UserName = userName;
                 loginEventArgs.WebService = webService;
+            }
+            else
+            {
+                loginEventArgs.UseOAuth = true;
             }
 
             // Show login dialog
@@ -864,6 +865,7 @@ namespace TimeClock.Core
                         // Save login information
                         Settings.SaveTimeClockUserSetting("Server", loginEventArgs.WebService);
                         Settings.SaveTimeClockUserSetting("Username", loginEventArgs.UserName);
+                        Settings.AccessToken = loginEventArgs.AccessToken;
 
                         if (loginEventArgs.RememberPassword && canSavePassword)
                         {
@@ -880,7 +882,7 @@ namespace TimeClock.Core
             }
             else
             {
-                System.Diagnostics.Debug.Fail("LoginShow event not implemented");
+                Debug.Fail("LoginShow event not implemented");
             }
 
             return false;

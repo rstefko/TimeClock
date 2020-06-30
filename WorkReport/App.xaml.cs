@@ -99,8 +99,13 @@ namespace TimeClock
 
         void businessLogic_LoginShow(object sender, BusinessLogic.LoginEventArgs e)
         {
+            this.ShowLoginDialog(e);
+        }
+
+        void ShowLoginDialog(BusinessLogic.LoginEventArgs args)
+        {
             ILoginDialog loginDialog;
-            if (e.UseOAuth)
+            if (args.UseOAuth)
             {
                 loginDialog = new OAuthLoginDialog();
             }
@@ -109,23 +114,32 @@ namespace TimeClock
                 loginDialog = new LoginDialog();
             }
 
-            loginDialog.UserName = e.UserName;
-            loginDialog.Server = e.WebService;
+            loginDialog.UserName = args.UserName;
+            loginDialog.Server = args.WebService;
 
-            if (!e.AllowRememberPassword)
+            if (!args.AllowRememberPassword)
             {
                 loginDialog.HideRememberPasswordControl();
             }
 
             if (loginDialog.ShowDialog().Value)
             {
-                e.Handled = true;
+                if (loginDialog.UseLegacyLogin)
+                {
+                    args.WebService = loginDialog.Server;
+                    args.UseOAuth = false;
 
-                e.RememberPassword = loginDialog.RememberPassword;
-                e.WebService = loginDialog.Server;
-                e.UserName = loginDialog.UserName;
-                e.Password = loginDialog.Password;
-                e.AccessToken = loginDialog.AccessToken;
+                    this.ShowLoginDialog(args);
+                    return;
+                }
+
+                args.Handled = true;
+
+                args.RememberPassword = loginDialog.RememberPassword;
+                args.WebService = loginDialog.Server;
+                args.UserName = loginDialog.UserName;
+                args.Password = loginDialog.Password;
+                args.AccessToken = loginDialog.AccessToken;
             }
         }
 
