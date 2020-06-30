@@ -38,12 +38,13 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://apps.stefko.cz/TimeClock4/</InstallUrl>
+    <UpdateUrl>https://apps.eway-crm.com/TimeClock/</UpdateUrl>
     <ProductName>Time Clock</ProductName>
     <PublisherName>Roman Štefko</PublisherName>
     <SuiteName>Time Clock</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>4.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
