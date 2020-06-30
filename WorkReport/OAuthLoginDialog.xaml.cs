@@ -64,7 +64,7 @@ namespace TimeClock
             var payload = decoder.DecodeToObject(this.AccessToken);
 
             this.UserName = payload["username"].ToString();
-            this.Server = payload["iss"].ToString().Replace("/auth", "/");
+            this.Server = payload["ws"].ToString();
 
             this.DialogResult = true;
             this.Close();
