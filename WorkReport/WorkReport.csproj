@@ -27,7 +27,7 @@
     <UpgradeBackupLocation />
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <PublishUrl>C:\Users\rstefko\Desktop\TimeClock4\</PublishUrl>
+    <PublishUrl>C:\Users\rstefko\Desktop\TimeClock\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -37,7 +37,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://apps.stefko.cz/TimeClock4/</InstallUrl>
+    <InstallUrl>https://apps.eway-crm.com/TimeClock/</InstallUrl>
     <ProductName>Time Clock</ProductName>
     <PublisherName>Roman Štefko</PublisherName>
     <SuiteName>Time Clock</SuiteName>
