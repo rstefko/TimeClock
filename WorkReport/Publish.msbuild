@@ -2,7 +2,7 @@
 <Project ToolsVersion="3.5" DefaultTargets="Publish" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- project name-->
-    <ProjectName>Time Clock</ProjectName>
+    <ProjectName>WorkReport</ProjectName>
     <!--properties for the project-build-->
     <DefaultBuildProperties>SignCode=1;Configuration=Release;ApplicationRevision=$(CCNetLabel);Platform=AnyCPU;ApplicationVersion=4.0.0.$(CCNetLabel);AssemblyFileVersion=4.0.0.$(CCNetLabel);SignAssembly=true;SignManifests=true;</DefaultBuildProperties>
     <!-- location of the click-once stuff, relative to the project -->
