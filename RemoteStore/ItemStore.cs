@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using eWayCRM.API.Net;
 using System.IO;
 using System.Xml;
+using TimeClock.RemoteStore.Exceptions;
 
 namespace TimeClock.RemoteStore
 {
@@ -74,10 +75,15 @@ namespace TimeClock.RemoteStore
             }
             catch (OAuthRequiredException)
             {
-                throw;
+                throw new RaiseOAuthDialogException();
             }
-            catch (LoginException)
+            catch (LoginException ex)
             {
+                if (ex.ReturnCode == "rcBadAccessToken")
+                {
+                    throw new RaiseOAuthDialogException();
+                }
+
                 return false;
             }
 

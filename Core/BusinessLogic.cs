@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using TimeClock.Core.Data.Binding.Objects;
 using eWayCRM.API;
 using eWayCRM.API.Exceptions;
+using TimeClock.RemoteStore.Exceptions;
 
 namespace TimeClock.Core
 {
@@ -780,7 +781,7 @@ namespace TimeClock.Core
                             accessToken: Settings.AccessToken
                             );
                     }
-                    catch (OAuthRequiredException)
+                    catch (RaiseOAuthDialogException)
                     {
                         loginEventArgs.UseOAuth = true;
                     }
