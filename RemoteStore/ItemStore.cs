@@ -11,6 +11,7 @@ using eWayCRM.API.Net;
 using System.IO;
 using System.Xml;
 using TimeClock.RemoteStore.Exceptions;
+using eWayCRM.API.EventArgs;
 
 namespace TimeClock.RemoteStore
 {
@@ -19,6 +20,11 @@ namespace TimeClock.RemoteStore
         static readonly ItemStore instance;
         
         Connection connection;
+
+        /// <summary>
+        /// Event used to refresh access token.
+        /// </summary>
+        public event System.EventHandler<AccessTokenEventArgs> RefreshAccessToken;
 
         /// <summary>
         /// Static constructor.
@@ -61,6 +67,7 @@ namespace TimeClock.RemoteStore
             {
                 this.connection = new Connection(server, userName, password, version, useDefaultCredentials: useDefaultCredentials, networkCredential: networkCredential, accessToken: accessToken);
                 connection.EnsureLogin();
+                connection.RefreshAccessToken += this.RefreshAccessToken;
 
                 JObject users = this.connection.CallMethod("SearchUsers", JObject.FromObject(new
                 {

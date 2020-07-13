@@ -10,6 +10,11 @@
             This class helps to manage the connection to the eWay-CRM API.
             </summary>
         </member>
+        <member name="E:eWayCRM.API.Connection.RefreshAccessToken">
+            <summary>
+            Event used to refresh access token.
+            </summary>
+        </member>
         <member name="P:eWayCRM.API.Connection.UserGuid">
             <summary>
             Gets the user Guid.
@@ -206,6 +211,16 @@
             <param name="includeRelations">If set to True, the JSON result will contain the relations as well.</param>
             <returns></returns>
         </member>
+        <member name="T:eWayCRM.API.EventArgs.AccessTokenEventArgs">
+            <summary>
+            Access token EventArgs.
+            </summary>
+        </member>
+        <member name="P:eWayCRM.API.EventArgs.AccessTokenEventArgs.AccessToken">
+            <summary>
+            Gets or sets the AccessToken.
+            </summary>
+        </member>
         <member name="T:eWayCRM.API.Exceptions.ClientMachineIdentifierDeterminationException">
             <summary>
             Thrown when the library was unable to determine th client machine unique identifier automatically.
@@ -217,6 +232,11 @@
             Exception thrown when the login method is not successful.
             </summary>
             <seealso cref="T:eWayCRM.API.Exceptions.ResponseException" />
+        </member>
+        <member name="T:eWayCRM.API.Exceptions.OAuthRequiredException">
+            <summary>
+            Exception raised when rcOAuthRequired is returned during Login.
+            </summary>
         </member>
         <member name="T:eWayCRM.API.Exceptions.ResponseException">
             <summary>
