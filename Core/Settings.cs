@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using System.IO;
+using System.Reflection;
 
 namespace TimeClock.Core
 {
@@ -34,7 +35,38 @@ namespace TimeClock.Core
 
         static Settings()
         {
-            if (!Directory.Exists(ApplicationDataPath)) Directory.CreateDirectory(ApplicationDataPath);
+            if (!Directory.Exists(ApplicationDataPath))
+            {
+                Directory.CreateDirectory(ApplicationDataPath);
+            }
+
+            UpdateInternetExplorerSettings();
+        }
+
+        private static void UpdateInternetExplorerSettings()
+        {
+            const string path = "Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_96DPI_PIXEL";
+            var registry = Registry.CurrentUser.OpenSubKey(path, true);
+            try
+            {
+                if (registry == null)
+                {
+                    registry = Registry.CurrentUser.CreateSubKey(path);
+                }
+
+                const string keyName = "TimeClock.exe";
+                if (Convert.ToInt32(registry.GetValue(keyName)) == 1)
+                    return;
+
+                registry.SetValue(keyName, 1);
+            }
+            finally
+            {
+                if (registry != null)
+                {
+                    registry.Dispose();
+                }
+            }
         }
 
         /// <summary>

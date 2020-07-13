@@ -57,6 +57,14 @@ namespace TimeClock.Core
             }
 #endif
 
+            RemoteStore.ItemStore.Instance.RefreshAccessToken += (sender, args) =>
+            {
+                if (this.LogIn())
+                {
+                    args.AccessToken = Settings.AccessToken;
+                }
+            };
+
             if (!LogIn())
             {
                 this.Shutdown();
@@ -220,8 +228,7 @@ namespace TimeClock.Core
 
         private void ShowOptionsDialog()
         {
-            if (OptionsShow != null)
-                OptionsShow(this, EventArgs.Empty);
+            OptionsShow?.Invoke(this, EventArgs.Empty);
         }
 
         private void Quit()

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeClock"
         mc:Ignorable="d"
-        Title="Login" Height="498" Width="458" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Login" Height="508" Width="458" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <WebBrowser x:Name="webBrowser" Navigating="webBrowser_Navigating"></WebBrowser>
     </Grid>
