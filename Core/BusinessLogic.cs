@@ -797,12 +797,19 @@ namespace TimeClock.Core
                         HttpWebResponse response = (HttpWebResponse)ex.Response;
                         if (response == null)
                             throw;
-
+                        
                         // When the exception is 401 (Unauthorized) -> display login dialog
                         if (response.StatusCode != HttpStatusCode.Unauthorized)
                             throw;
 
-                        isHttpAuthentification = true;
+                        if (string.IsNullOrEmpty(Settings.AccessToken))
+                        {
+                            isHttpAuthentification = true;
+                        }
+                        else
+                        {
+                            loginEventArgs.UseOAuth = true;
+                        }
                     }
 
                     if (result)
