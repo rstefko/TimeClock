@@ -66,8 +66,8 @@ namespace TimeClock.RemoteStore
             try
             {
                 this.connection = new Connection(server, userName, password, version, useDefaultCredentials: useDefaultCredentials, networkCredential: networkCredential, accessToken: accessToken);
-                connection.EnsureLogin();
                 connection.RefreshAccessToken += this.RefreshAccessToken;
+                connection.EnsureLogin();
 
                 JObject users = this.connection.CallMethod("SearchUsers", JObject.FromObject(new
                 {

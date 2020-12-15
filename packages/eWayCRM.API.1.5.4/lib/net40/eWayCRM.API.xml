@@ -211,6 +211,11 @@
             <param name="includeRelations">If set to True, the JSON result will contain the relations as well.</param>
             <returns></returns>
         </member>
+        <member name="T:eWayCRM.API.Constants.ObjectTypes">
+            <summary>
+            Enumeration of all available object types.
+            </summary>
+        </member>
         <member name="T:eWayCRM.API.EventArgs.AccessTokenEventArgs">
             <summary>
             Access token EventArgs.
@@ -265,6 +270,14 @@
             Formats DateTime for JSON communication with API.
             </summary>
             <param name="dateTime">The date time.</param>
+            <returns></returns>
+        </member>
+        <member name="M:eWayCRM.API.Extensions.GetDateTime(Newtonsoft.Json.Linq.JToken,System.String)">
+            <summary>
+            Gets date time from the JToken. This method can handle old format with space instead of T.
+            </summary>
+            <param name="token">The JToken.</param>
+            <param name="key">The key.</param>
             <returns></returns>
         </member>
         <member name="T:eWayCRM.API.Net.ParameterCollection">

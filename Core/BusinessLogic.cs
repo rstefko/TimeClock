@@ -59,7 +59,7 @@ namespace TimeClock.Core
 
             RemoteStore.ItemStore.Instance.RefreshAccessToken += (sender, args) =>
             {
-                if (this.LogIn())
+                if (this.LogIn(true))
                 {
                     args.AccessToken = Settings.AccessToken;
                 }
@@ -761,7 +761,7 @@ namespace TimeClock.Core
             this.SummaryShow?.Invoke(this, new WorkReportsEventArgs(this.workReports));
         }
 
-        private bool LogIn()
+        private bool LogIn(bool refreshToken = false)
         {
             var loginEventArgs = new LoginEventArgs();
             bool result = false;
@@ -775,7 +775,7 @@ namespace TimeClock.Core
                 string userName = Settings.TryGetUserSetting("Username", string.Empty) as string;
                 string password = Settings.TryGetUserSetting("Password", null) as string;
 
-                if (!string.IsNullOrEmpty(userName) && password != string.Empty)
+                if (!refreshToken && !string.IsNullOrEmpty(userName) && password != string.Empty)
                 {
                     try
                     {
@@ -820,7 +820,8 @@ namespace TimeClock.Core
                 loginEventArgs.UserName = userName;
                 loginEventArgs.WebService = webService;
             }
-            else
+            
+            if (webService == null || refreshToken)
             {
                 loginEventArgs.UseOAuth = true;
             }
