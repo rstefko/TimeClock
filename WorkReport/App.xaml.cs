@@ -28,6 +28,8 @@ namespace TimeClock
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            DevExpress.Xpf.Core.ApplicationThemeHelper.UseLegacyDefaultTheme = true;
+
             this.businessLogic.SummaryShow += new EventHandler<BusinessLogic.WorkReportsEventArgs>(businessLogic_SummaryShow);
             this.businessLogic.LoginShow += new EventHandler<BusinessLogic.LoginEventArgs>(businessLogic_LoginShow);
             this.businessLogic.ShutdownApplication += new EventHandler<BusinessLogic.ShutdownEventArgs>(businessLogic_ShutdownApplication);

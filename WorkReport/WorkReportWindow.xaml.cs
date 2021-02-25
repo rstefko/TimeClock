@@ -90,7 +90,7 @@ namespace TimeClock
                 return;
             }
 
-            if (this.cboProject.SelectedValue == null)
+            if (this.cboProject.EditValue == null)
             {
                 MessageBoxHelper.Warn("Project has to be specified.");
                 return;
@@ -111,7 +111,7 @@ namespace TimeClock
 
         private void SaveUserSettings()
         {
-            Core.Settings.SaveUserSetting("Project", Core.Settings.TIMECLOCK_REGISTRY_KEY, this.cboProject.SelectedValue);
+            Core.Settings.SaveUserSetting("Project", Core.Settings.TIMECLOCK_REGISTRY_KEY, this.cboProject.EditValue);
             Core.Settings.SaveUserSetting("WorkReportType", Core.Settings.TIMECLOCK_REGISTRY_KEY, this.cboType.SelectedValue);
         }
 
