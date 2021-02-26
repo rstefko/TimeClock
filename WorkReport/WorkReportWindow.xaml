@@ -4,7 +4,7 @@
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Class="TimeClock.WorkReportWindow"
     Title="Work Report" Height="300" Width="500" WindowStartupLocation="CenterOwner"
     ResizeMode="NoResize" Icon="Images/workreport.ico" Initialized="Window_Initialized" Closing="Window_Closing">
-    <Grid x:Name="grid">
+    <Grid x:Name="grid" FocusManager.FocusedElement="{Binding ElementName=tbxSubject}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
