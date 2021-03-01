@@ -91,7 +91,9 @@
     <Reference Include="DevExpress.Xpf.Core.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v20.2, Version=20.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="eWayCRM.API, Version=1.5.4.0, Culture=neutral, PublicKeyToken=57e4eee64106844e, processorArchitecture=MSIL">
       <HintPath>..\packages\eWayCRM.API.1.5.4\lib\net40\eWayCRM.API.dll</HintPath>
     </Reference>
