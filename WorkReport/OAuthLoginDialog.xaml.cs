@@ -1,4 +1,4 @@
-﻿using eWayCRM.API.Net;
+﻿using eWay.Core.Net;
 using JWT;
 using JWT.Builder;
 using JWT.Serializers;
