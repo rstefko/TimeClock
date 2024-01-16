@@ -41,7 +41,7 @@
         <Label Margin="5" Grid.Column="0" Grid.Row="5" Content="Note"/>
 
         <TextBox Margin="5" x:Name="tbxSubject" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Subject}"/>
-        <dxe:ComboBoxEdit AllowUpdateTwoWayBoundPropertiesOnSynchronization="True" Margin="5" x:Name="cboProject" DisplayMember="FileAs" ValueMember="ItemGuid" EditValue="{Binding Project}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" FilterCondition="Contains" IncrementalFiltering="True" ValidateOnTextInput="False" ImmediatePopup="True" />
+        <ComboBox Margin="5" Name="cboProject" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" SelectedValue="{Binding Path=Project}" Grid.Column="1" Grid.Row="2" IsEditable="True" Grid.ColumnSpan="3"></ComboBox>
         <Label Margin="5" x:Name="lblFrom" Grid.Column="3" Grid.Row="3" Content="{Binding FromTime}"/>
         <Label Margin="5" x:Name="lblTo" Grid.Column="3" Grid.Row="4" Content="{Binding ToTime}"/>
         <ComboBox Margin="5" x:Name="cboType" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" SelectedValue="{Binding Type}" Grid.Column="1" Grid.Row="3" IsEditable="True"/>

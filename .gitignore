@@ -6,3 +6,6 @@
 /WorkReport/bin
 /WorkReport/obj
 /WorkReport/WorkReport.csproj.user
+/Core/.vs
+/RemoteStore/.vs
+/WorkReport/.vs
