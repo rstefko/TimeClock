@@ -9,7 +9,7 @@
   <Identity
     Name="3013RomanStefko.TimeClockTimesheets"
     Publisher="CN=B6AF6C4D-FC7D-4A76-827D-E83C49D772BE"
-    Version="4.1.0.0" />
+    Version="4.1.1.0" />
 
   <Properties>
     <DisplayName>Time Clock (Timesheets)</DisplayName>

@@ -59,14 +59,15 @@
     <Reference Include="eWayCRM.API, Version=1.5.9.0, Culture=neutral, PublicKeyToken=57e4eee64106844e, processorArchitecture=MSIL">
       <HintPath>..\packages\eWayCRM.API.1.5.9\lib\net40\eWayCRM.API.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>.\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System">
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
     </Reference>
     <Reference Include="System.Drawing">
@@ -75,6 +76,7 @@
     </Reference>
     <Reference Include="System.Runtime.Remoting">
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms">
     </Reference>
     <Reference Include="System.Xml.Linq">
