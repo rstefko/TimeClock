@@ -34,6 +34,7 @@ namespace TimeClock.Core
         private const string MENU_ITEM_COMMIT = "Commit";
         private const string MENU_ITEM_EXIT = "Exit";
         private const string MENU_ITEM_SETTINGS = "Settings";
+        private const string MENU_ITEM_LOGOUT = "Logout";
 
         /// <summary>
         /// Default constructor.
@@ -137,9 +138,9 @@ namespace TimeClock.Core
             this.StartCounting(StartCountingReasons.SystemUnlocked, DateTime.Now);
         }
 
-        private void Shutdown()
+        private void Shutdown(bool restart = false)
         {
-            this.ShutdownApplication?.Invoke(this, new ShutdownEventArgs());
+            this.ShutdownApplication?.Invoke(this, new ShutdownEventArgs(restart));
         }
 
         private void CheckForUnfinishedWorkReport()
@@ -192,6 +193,7 @@ namespace TimeClock.Core
             this.menu.MenuItems.Add("-");
             this.menu.MenuItems.Add(MENU_ITEM_SETTINGS, menuItem_Click);
             this.menu.MenuItems.Add("-");
+            this.menu.MenuItems.Add(MENU_ITEM_LOGOUT, menuItem_Click);
             this.menu.MenuItems.Add(MENU_ITEM_EXIT, menuItem_Click);
         }
 
@@ -204,7 +206,13 @@ namespace TimeClock.Core
                 switch (item.Text)
                 {
                     case MENU_ITEM_EXIT:
-                        this.Quit();
+                        this.Quit(false);
+                        break;
+
+                    case MENU_ITEM_LOGOUT:
+                        Settings.SaveTimeClockUserSetting("Server", null);
+                        Settings.SaveTimeClockUserSetting("Username", null);
+                        this.Quit(true);
                         break;
 
                     case MENU_ITEM_START:
@@ -231,7 +239,7 @@ namespace TimeClock.Core
             OptionsShow?.Invoke(this, EventArgs.Empty);
         }
 
-        private void Quit()
+        private void Quit(bool restart)
         {
             // Stop counting if it is running.
             if (this.startTime.HasValue)
@@ -255,7 +263,7 @@ namespace TimeClock.Core
                     this.ShowSummary();
             }
 
-            this.Shutdown();
+            this.Shutdown(restart);
         }
 
         /// <summary>
@@ -653,17 +661,34 @@ namespace TimeClock.Core
             }
 
             /// <summary>
+            /// True to restart he application.
+            /// </summary>
+            public bool Restart
+            {
+                get;
+                private set;
+            }
+
+            /// <summary>
             /// Default constructor.
             /// </summary>
             public ShutdownEventArgs(int exitCode)
             {
                 this.ExitCode = exitCode;
             }
-			
-			/// <summary>
-			/// Constructor without parameters. 
-			/// </summary>
-			public ShutdownEventArgs()
+
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
+            public ShutdownEventArgs(bool restart)
+            {
+                this.Restart = restart;
+            }
+
+            /// <summary>
+            /// Constructor without parameters. 
+            /// </summary>
+            public ShutdownEventArgs()
 				: this(0)
 			{
 				

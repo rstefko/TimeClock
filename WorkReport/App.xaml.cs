@@ -94,6 +94,11 @@ namespace TimeClock
 
         void businessLogic_ShutdownApplication(object sender, BusinessLogic.ShutdownEventArgs e)
         {
+            if (e.Restart)
+            {
+                System.Windows.Forms.Application.Restart();
+            }
+
             this.Shutdown(e.ExitCode);
         }
 
