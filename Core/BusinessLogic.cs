@@ -212,6 +212,7 @@ namespace TimeClock.Core
                     case MENU_ITEM_LOGOUT:
                         Settings.SaveTimeClockUserSetting("Server", null);
                         Settings.SaveTimeClockUserSetting("Username", null);
+                        Settings.AccessToken = null;
                         this.Quit(true);
                         break;
 
