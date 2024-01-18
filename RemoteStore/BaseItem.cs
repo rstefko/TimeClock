@@ -52,5 +52,10 @@ namespace TimeClock.RemoteStore
             get;
             set;
         }
+
+        public override string ToString()
+        {
+            return this.FileAs ?? string.Empty;
+        }
     }
 }
