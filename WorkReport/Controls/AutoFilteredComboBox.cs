@@ -180,7 +180,7 @@ namespace TimeClock.Controls
             if (IsCaseSensitive)
                 return value.ToString().Contains(_currentText);
             else
-                return value.ToString().ToUpper().Contains(_currentText.ToUpper());
+                return value.ToString().IndexOf(_currentText, StringComparison.OrdinalIgnoreCase) >= 0;
         }
         #endregion
 
