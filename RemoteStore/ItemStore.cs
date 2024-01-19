@@ -137,21 +137,177 @@ namespace TimeClock.RemoteStore
 
         public IEnumerable<BaseItem> GetProjectsLeads()
         {
-            var projects = this.GetItems("Projects");
-            var leads = this.GetItems("Leads");
+            List<BaseItem> projectsLeads = new List<BaseItem>();
+            const int batchSize = 500;
+            bool finished = false;
+            int skip = 0;
 
-            var companyGuids = projects.Where(x => x.Value<string>("Companies_CustomerGuid") != null).Select(x => new Guid(x.Value<string>("Companies_CustomerGuid")))
-                .Union(leads.Where(x => x.Value<string>("Companies_CustomerGuid") != null).Select(x => new Guid(x.Value<string>("Companies_CustomerGuid"))));
+            while (!finished)
+            {
+                string query = $$"""
+                    { "query": {
+                    "__type": "MainTableQuery:#EQ",
+                    "ItemTypes": ["Projects", "Leads"],
+                    "Fields": [
+                        {
+                            "__type": "Column:#EQ",
+                            "Source": {
+                                "__type": "MainTable:#EQ"
+                            },
+                            "Name": "ItemGUID" 
+                        },
+                        {
+                            "__type": "Token:#EQ",
+                            "Source": {
+                                "__type": "MainTable:#EQ"
+                            },
+                            "Name": "ItemType"
+                        },
+                        {
+                            "__type": "Column:#EQ",
+                            "Source": {
+                                "__type": "MainTable:#EQ"
+                            },
+                            "Name": "FileAs" 
+                        },
+                        {
+                            "__type": "VariatedColumn:#EQ",
+                            "Alias": "CONTACTPERSON_FileAs",
+                            "Transformation": "ISNULL({0}, '')",
+                            "Source": {
+                                "__type": "MainTable:#EQ"
+                            },
+                            "Variations": [
+                                {
+                                    "__type": "FieldByFolderName:#EQ",
+                                    "FolderName": "Leads",
+                                    "Field": {
+                                        "__type": "SubstituableColumn:#EQ",
+                                        "Name": "FileAs",
+                                        "Source": {
+                                            "__type": "Relation:#EQ",
+                                            "ItemTypes": ["Contacts"],
+                                            "RelationType": "CONTACTPERSON",
+                                            "Direction": 1
+                                        },
+                                        "Substitute": {
+                                            "__type": "Column:#EQ",
+                                            "Name": "ContactPerson",
+                                            "Source": {
+                                                "__type": "MainTable:#EQ"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "__type": "FieldByFolderName:#EQ",
+                                    "FolderName": "Projects",
+                                    "Field": {
+                                        "__type": "Column:#EQ",
+                                        "Name": "FileAs",
+                                        "Source": {
+                                            "__type": "Relation:#EQ",
+                                            "ItemTypes": ["Contacts"],
+                                            "RelationType": "CONTACTPERSON",
+                                            "Direction": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "__type": "VariatedColumn:#EQ",
+                            "Alias": "CUSTOMER_FileAs",
+                            "Transformation": "ISNULL({0}, '')",
+                            "Source": {
+                                "__type": "MainTable:#EQ" 
+                            },
+                            "Variations": [
+                                {
+                                    "__type": "FieldByFolderName:#EQ",
+                                    "FolderName": "Leads",
+                                    "Field": {
+                                        "__type": "SubstituableColumn:#EQ",
+                                        "Name": "FileAs",
+                                        "Source": {
+                                            "__type": "Relation:#EQ",
+                                            "ItemTypes": ["Companies"],
+                                            "RelationType": "CUSTOMER",
+                                            "Direction": 1
+                                        },
+                                        "Substitute": {
+                                            "__type": "Column:#EQ",
+                                            "Name": "Customer",
+                                            "Source": {
+                                                "__type": "MainTable:#EQ" 
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "__type": "FieldByFolderName:#EQ",
+                                    "FolderName": "Projects",
+                                    "Field": {
+                                        "__type": "Column:#EQ",
+                                        "Name": "FileAs",
+                                        "Source": {
+                                            "__type": "Relation:#EQ",
+                                            "ItemTypes": ["Companies"],
+                                            "RelationType": "CUSTOMER",
+                                            "Direction": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "Filter": {
+                        "__type": "AndFilterExpressionOperator:#EQ",
+                        "Children": [
+                            {
+                                "__type": "EqualsFilterExpressionPredicate:#EQ",
+                                "Field": {
+                                    "__type": "Column:#EQ",
+                                    "Source": {
+                                        "__type": "MainTable:#EQ"
+                                    },
+                                    "Name": "CompletedDate"
+                                },
+                                "Value": null
+                            },
+                            {
+                                "__type": "EqualsFilterExpressionPredicate:#EQ",
+                                "Field": {
+                                    "__type": "Column:#EQ",
+                                    "Source": {
+                                        "__type": "MainTable:#EQ"
+                                    },
+                                    "Name": "LostDate"
+                                },
+                                "Value": null
+                            }
+                        ]
+                    },
+                    "Paging": {
+                        "Skip": {{skip}},
+                        "Take": {{batchSize}}
+                    }
+                } }
+                """;
 
-            var contactGuids = projects.Where(x => x.Value<string>("Contacts_ContactPersonGuid") != null).Select(x => new Guid(x.Value<string>("Contacts_ContactPersonGuid")))
-                .Union(leads.Where(x => x.Value<string>("Contacts_ContactPersonGuid") != null).Select(x => new Guid(x.Value<string>("Contacts_ContactPersonGuid"))));
+                JObject items = this.connection.CallMethod($"Query", JObject.Parse(query));
+                var newItems = ((JArray)items["Data"]).Select(x => new BaseItem(x.Value<string>("ItemType"), new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x)));
 
-            var companies = this.GetItemGuidFileAsDictionary("Companies", companyGuids);
-            var contacts = this.GetItemGuidFileAsDictionary("Contacts", contactGuids);
+                if (newItems.Count() != batchSize)
+                {
+                    finished = true;
+                }
 
-            return projects.Select(x => new BaseItem("Projects", new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts)))
-                .Concat(leads.Select(x => new BaseItem("Leads", new Guid(x.Value<string>("ItemGUID")), this.GetProjectFileAs(x, companies, contacts))))
-                .OrderBy(x => x.FileAs);
+                projectsLeads.AddRange(newItems.Where(x => !string.IsNullOrEmpty(x.FileAs)));
+                skip += batchSize;
+            }
+
+            return projectsLeads.OrderBy(x => x.FileAs);
         }
 
         public void SaveWorkReport(WorkReport item, KeyValuePair<string, string>? additionalField)
@@ -183,32 +339,17 @@ namespace TimeClock.RemoteStore
             }));
         }
 
-        private JArray GetItems(string folderName)
+        private string GetProjectFileAs(JToken project)
         {
-            JObject items = this.connection.CallMethod($"Get{folderName}");
-            var itemGuids = ((JArray)items["Data"])
-                .Where(x => !x.Value<bool>("IsLost") && !x.Value<bool>("IsCompleted"))
-                .Select(x => new Guid(x.Value<string>("ItemGUID")));
-
-            return this.connection.GetItemsByItemGuids($"Get{folderName}ByItemGuids", itemGuids, true);
-        }
-
-        private string GetProjectFileAs(JToken project, Dictionary<string, string> companies, Dictionary<string, string> contacts)
-        {
-            string companyGuid = project.Value<string>("Companies_CustomerGuid");
-            string contactGuid = project.Value<string>("Contacts_ContactPersonGuid");
+            string companyFileAs = project.Value<string>("CUSTOMER_FileAs");
+            string contactFileAs = project.Value<string>("CONTACTPERSON_FileAs");
             string projectFileAs = project.Value<string>("FileAs");
 
-            string companyFileAs = project.Value<string>("Customer");
-            string contactFileAs = project.Value<string>("ContactPerson");
-            if (!string.IsNullOrEmpty(companyFileAs) || (!string.IsNullOrEmpty(companyGuid) && companies.TryGetValue(companyGuid, out companyFileAs)))
-            {
+            if (!string.IsNullOrEmpty(companyFileAs))
                 return $"{companyFileAs}, {projectFileAs}";
-            }
-            else if (!string.IsNullOrEmpty(contactFileAs) || (!string.IsNullOrEmpty(contactGuid) && contacts.TryGetValue(contactGuid, out contactFileAs)))
-            {
+
+            if (!string.IsNullOrEmpty(contactFileAs))
                 return $"{contactFileAs}, {projectFileAs}";
-            }
 
             return projectFileAs;
         }

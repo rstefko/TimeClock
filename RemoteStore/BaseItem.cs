@@ -30,6 +30,9 @@ namespace TimeClock.RemoteStore
 
         public BaseItem(string folderName, Guid itemGuid, string fileAs)
         {
+            if (string.IsNullOrEmpty(folderName))
+                throw new ArgumentNullException(nameof(folderName));
+
             this.FolderName = folderName;
             this.ItemGuid = itemGuid;
             this.FileAs = fileAs;
