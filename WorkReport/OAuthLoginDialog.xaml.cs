@@ -49,6 +49,7 @@ namespace TimeClock
         {
             string clientId = Settings.APPLICATION_NAME_SHORT.ToLower();
             string baseUrl = "https://login.eway-crm.com/";
+            string additionalParameters = "";
 
             string loginForced = "false";
             if (!string.IsNullOrEmpty(this.Server))
@@ -56,8 +57,12 @@ namespace TimeClock
                 baseUrl = UrlBuilder.Combine(this.Server, "auth/connect/authorize/");
                 loginForced = "true";
             }
+            else
+            {
+                additionalParameters = "&prompt=login";
+            }
             
-            this.webBrowser.Navigate($"{baseUrl}?client_id={clientId}&scope=api&redirect_uri=http://localhost&response_type=token&login_hint={this.UserName}&login_forced={loginForced}&ui_locales=en");
+            this.webBrowser.Navigate($"{baseUrl}?client_id={clientId}&scope=api&redirect_uri=http://localhost&response_type=token&login_hint={this.UserName}&login_forced={loginForced}&ui_locales=en{additionalParameters}");
         }
 
         private void webBrowser_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
