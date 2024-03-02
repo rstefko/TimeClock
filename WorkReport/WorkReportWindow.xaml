@@ -41,7 +41,7 @@
         <Label Margin="5" Grid.Column="0" Grid.Row="5" Content="Note"/>
 
         <TextBox Margin="5" x:Name="tbxSubject" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Subject}"/>
-        <local:AutoFilteredComboBox Margin="5" x:Name="cboProject" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="False" IsTextSearchCaseSensitive="False" SelectedValue="{Binding Path=Project}" Grid.Column="1" Grid.Row="2" IsEditable="True" Grid.ColumnSpan="3">
+        <local:AutoFilteredComboBox Margin="5" x:Name="cboProject" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="False" IsTextSearchCaseSensitive="False" DropDownOnFocus="True" SelectedValue="{Binding Path=Project}" Grid.Column="1" Grid.Row="2" IsEditable="True" Grid.ColumnSpan="3">
             <local:AutoFilteredComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel VirtualizationMode="Recycling" />

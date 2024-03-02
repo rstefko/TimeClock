@@ -98,6 +98,9 @@ namespace TimeClock.Controls
             if (this.ItemsSource != null && this.DropDownOnFocus)
             {
                 this.IsDropDownOpen = true;
+
+                // Start with no filter
+                this.SetTextFilter(string.Empty);
             }
         }
         #endregion
@@ -224,7 +227,12 @@ namespace TimeClock.Controls
             if (_ignoreTextChanged)
                 return;
 
-            _currentText = Text;
+            this.SetTextFilter(this.Text);
+        }
+
+        private void SetTextFilter(string filter)
+        {
+            _currentText = filter;
 
             if (!this.IsTextSearchEnabled)
             {
