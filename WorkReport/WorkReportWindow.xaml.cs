@@ -160,8 +160,8 @@ namespace TimeClock
         {
             this.InitializeReservedFields();
 
-            this.cboProject.ItemsSource = RemoteStore.Items.ProjectsLeads;
-            this.cboType.ItemsSource = RemoteStore.Items.WorkReportTypes;
+            this.cboProject.ItemsSource = RemoteStore.Items.ProjectsLeads.ToArray();
+            this.cboType.ItemsSource = RemoteStore.Items.WorkReportTypes.ToArray();
         }
 
         private void InitializeReservedFields()
