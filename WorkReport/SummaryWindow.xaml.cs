@@ -16,6 +16,7 @@ using TimeClock.RemoteStore;
 using System.ComponentModel;
 using TimeClock.Core;
 using Newtonsoft.Json.Linq;
+using TimeClock.Helpers;
 
 namespace TimeClock
 {
@@ -117,10 +118,17 @@ namespace TimeClock
                     if (!item.WrappedInstance.IsValid)
                         continue;
 
-                    RemoteStore.WorkReport.SaveWorkReport(item.WrappedInstance);
+                    try
+                    {
+                        RemoteStore.WorkReport.SaveWorkReport(item.WrappedInstance);
 
-                    // Remove successfully saved work report from the list
-                    this.workReports.RemoveAt(i);
+                        // Remove successfully saved work report from the list
+                        this.workReports.RemoveAt(i);
+                    }
+                    catch (eWayCRM.API.Exceptions.ResponseException ex) when (ex.ReturnCode == "rcParameterError")
+                    {
+                        MessageBoxHelper.Warn($"Unable to save time sheet '{item.Subject}': {ex.Message}");
+                    }
                 }
 
                 // Save workreports.
