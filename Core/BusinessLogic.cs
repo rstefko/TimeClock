@@ -101,8 +101,7 @@ namespace TimeClock.Core
             {
                 if (this.workReports.Count != 0)
                 {
-                    if (MessageBoxHelper.Ask("There are uncommited work reports. Would you like to commit them now?") == DialogResult.Yes)
-                        this.ShowSummary();
+                    this.ShowSummary();
                 }
                 else if (Settings.AutoStart)
                 {
