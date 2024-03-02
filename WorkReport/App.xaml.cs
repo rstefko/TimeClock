@@ -82,7 +82,7 @@ namespace TimeClock
 
         void businessLogic_NewWorkReportShow(object sender, BusinessLogic.WorkReportEventArgs e)
         {
-            WorkReportWindow workReportWindow = new WorkReportWindow(true);
+            WorkReportWindow workReportWindow = new WorkReportWindow(((BusinessLogic)sender).WorkReports, true);
             workReportWindow.WorkReport = e.WorkReport;
 
             if (workReportWindow.ShowDialog().Value)

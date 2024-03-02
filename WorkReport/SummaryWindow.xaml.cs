@@ -95,7 +95,7 @@ namespace TimeClock
 
         void EditWorkReport(EditableWorkReport item)
         {
-            WorkReportWindow window = new WorkReportWindow();
+            WorkReportWindow window = new WorkReportWindow(this.workReports.Select(x => x.WrappedInstance), false);
             window.Owner = this;
             window.WorkReport = item;
 

@@ -14,6 +14,7 @@ using TimeClock.Core.Data.Binding.Objects;
 using eWayCRM.API;
 using eWayCRM.API.Exceptions;
 using TimeClock.RemoteStore.Exceptions;
+using TimeClock.RemoteStore;
 
 namespace TimeClock.Core
 {
@@ -43,6 +44,11 @@ namespace TimeClock.Core
         {
             Microsoft.Win32.SystemEvents.SessionSwitch += new Microsoft.Win32.SessionSwitchEventHandler(SystemEvents_SessionSwitch);
         }
+
+        /// <summary>
+        /// Gets collection of other work reports in the queue.
+        /// </summary>
+        public IEnumerable<WorkReport> WorkReports => this.workReports.Select(x => x.WrappedInstance);
 
         /// <summary>
         /// Executes application initialization logic.

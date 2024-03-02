@@ -1,7 +1,7 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:TimeClock.Controls" x:Class="TimeClock.WorkReportWindow"
+    xmlns:local="clr-namespace:TimeClock.Controls" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="TimeClock.WorkReportWindow"
     Title="Work Report" Height="300" Width="500" WindowStartupLocation="CenterOwner"
     ResizeMode="NoResize" Icon="Images/workreport.ico" Initialized="Window_Initialized" Closing="Window_Closing">
     <Grid x:Name="grid" FocusManager.FocusedElement="{Binding ElementName=tbxSubject}">
@@ -48,8 +48,8 @@
                 </ItemsPanelTemplate>
             </local:AutoFilteredComboBox.ItemsPanel>
         </local:AutoFilteredComboBox>
-        <Label Margin="5" x:Name="lblFrom" Grid.Column="3" Grid.Row="3" Content="{Binding FromTime}"/>
-        <Label Margin="5" x:Name="lblTo" Grid.Column="3" Grid.Row="4" Content="{Binding ToTime}"/>
+        <xctk:TimePicker ShowButtonSpinner="False" IsOpen="False" Margin="5" x:Name="lblFrom" Grid.Column="3" Grid.Row="3" Value="{Binding FromTime}"/>
+        <xctk:TimePicker ShowButtonSpinner="False" IsOpen="False" Margin="5" x:Name="lblTo" Grid.Column="3" Grid.Row="4" Value="{Binding ToTime}"/>
         <ComboBox Margin="5" x:Name="cboType" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" SelectedValue="{Binding Type}" Grid.Column="1" Grid.Row="3" IsEditable="True"/>
         <TextBox Margin="5" x:Name="tbxReservedField" Grid.Column="1" Grid.Row="4" Text="{Binding ReservedField}"/>
         <TextBox Margin="5" x:Name="tbxNote" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding Note}"/>

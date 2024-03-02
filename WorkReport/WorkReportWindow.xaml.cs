@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 using TimeClock.Core;
 using TimeClock.Core.Data.Binding.Objects;
 using TimeClock.Helpers;
+using TimeClock.RemoteStore;
 
 namespace TimeClock
 {
@@ -23,10 +25,11 @@ namespace TimeClock
     /// </summary>
     public partial class WorkReportWindow : Window
     {
+        private readonly IEnumerable<WorkReport> workReports;
         private EditableWorkReport workReport;
-        private bool isNew;
+        private readonly bool isNew;
 
-        public WorkReportWindow()
+        private WorkReportWindow()
         {
             InitializeComponent();
         }
@@ -34,10 +37,15 @@ namespace TimeClock
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkReportWindow"/> class.
         /// </summary>
+        /// <param name="workReports">Collection of other work reports.</param>
         /// <param name="isNew">True if the window is displayed for new work report.</param>
-        public WorkReportWindow(bool isNew)
+        public WorkReportWindow(IEnumerable<WorkReport> workReports, bool isNew)
             : this()
         {
+            if (workReports == null)
+                throw new ArgumentNullException(nameof(workReports));
+
+            this.workReports = workReports;
             this.isNew = isNew;
 
             if (isNew)
@@ -76,11 +84,24 @@ namespace TimeClock
             // Called to make sure that all current data are stored in data row
             this.btnOK.Focus();
 
-            if (this.WorkReport.ToTime.Subtract(this.WorkReport.FromTime).TotalMinutes == 0)
+            if (this.WorkReport.ToTime.Subtract(this.WorkReport.FromTime).TotalMinutes <= 0)
             {
-                if (MessageBoxHelper.Ask("Work report has to last at least one minute. Do you want to keep on counting?") == MessageBoxResult.Yes)
-                    this.OnKeepCounting();
+                if (this.isNew)
+                {
+                    if (MessageBoxHelper.Ask("Time sheet has to last at least one minute. Do you want to keep on counting?") == MessageBoxResult.Yes)
+                        this.OnKeepCounting();
+                }
+                else
+                {
+                    MessageBoxHelper.Warn("Start time must be less than end time.");
+                }
 
+                return;
+            }
+
+            if (this.IsWorkReportInTheSameTimeAlreadyCreated(this.WorkReport.WrappedInstance.ItemGuid, this.WorkReport.FromTime, this.WorkReport.ToTime))
+            {
+                MessageBoxHelper.Warn("Time provided in From / To time fields would overlap with other time sheets.");
                 return;
             }
 
@@ -107,6 +128,26 @@ namespace TimeClock
             this.workReport.EndEdit();
 
             this.DialogResult = true;
+        }
+        
+        private bool IsWorkReportInTheSameTimeAlreadyCreated(Guid itemGuid, DateTime fromTime, DateTime toTime)
+        {
+            foreach (var workReport in this.workReports)
+            {
+                // Don't check itself
+                if (workReport.ItemGuid == itemGuid)
+                    continue;
+
+                if (this.IsDateRangesOverlap(workReport.FromTime, workReport.ToTime, fromTime, toTime))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool IsDateRangesOverlap(DateTime startDateA, DateTime endDateA, DateTime startDateB, DateTime endDateB)
+        {
+            return (startDateA < endDateB) && (startDateB < endDateA);
         }
 
         private void SaveUserSettings()
