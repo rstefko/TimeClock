@@ -48,10 +48,10 @@
                 </ItemsPanelTemplate>
             </local:AutoFilteredComboBox.ItemsPanel>
         </local:AutoFilteredComboBox>
-        <xctk:TimePicker ShowButtonSpinner="False" IsOpen="False" Margin="5" x:Name="lblFrom" Grid.Column="3" Grid.Row="3" Value="{Binding FromTime}"/>
-        <xctk:TimePicker ShowButtonSpinner="False" IsOpen="False" Margin="5" x:Name="lblTo" Grid.Column="3" Grid.Row="4" Value="{Binding ToTime}"/>
         <ComboBox Margin="5" x:Name="cboType" DisplayMemberPath="FileAs" SelectedValuePath="ItemGuid" IsTextSearchEnabled="True" SelectedValue="{Binding Type}" Grid.Column="1" Grid.Row="3" IsEditable="True"/>
         <TextBox Margin="5" x:Name="tbxReservedField" Grid.Column="1" Grid.Row="4" Text="{Binding ReservedField}"/>
+        <xctk:TimePicker ShowButtonSpinner="False" IsOpen="False" Margin="5" x:Name="lblFrom" Grid.Column="3" Grid.Row="3" Value="{Binding FromTime}"/>
+        <xctk:TimePicker ShowButtonSpinner="False" IsOpen="False" Margin="5" x:Name="lblTo" Grid.Column="3" Grid.Row="4" Value="{Binding ToTime}"/>
         <TextBox Margin="5" x:Name="tbxNote" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding Note}"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="4" HorizontalAlignment="Right">
