@@ -16,6 +16,8 @@ namespace TimeClock.Controls
         bool _ignoreTextChanged;
         string _currentText;
 
+        TextBox EditableTextBox => GetTemplateChild("PART_EditableTextBox") as TextBox;
+
         /// <summary>
         /// Creates a new instance of <see cref="AutoFilteredComboBox" />.
         /// </summary>
@@ -146,7 +148,10 @@ namespace TimeClock.Controls
         #region | Handle filtering |
         private void RefreshFilter()
         {
-            if (this.ItemsSource != null)
+            if (this.ItemsSource == null)
+                return;
+
+            this.FreezeTextBoxState(() =>
             {
                 Action<string> filterList = FilterList;
                 if (filterList != null)
@@ -160,7 +165,18 @@ namespace TimeClock.Controls
                 }
                 this.SelectedIndex = -1;    // Prepare so arrow down selects first
                 this.IsDropDownOpen = true;
-            }
+            });
+        }
+
+        private void FreezeTextBoxState(Action action)
+        {
+            var text = this.Text;
+            var selectionStart = this.EditableTextBox.SelectionStart;
+            var selectionLength = this.EditableTextBox.SelectionLength;
+            action();
+            this.Text = text;
+            this.EditableTextBox.SelectionStart = selectionStart;
+            this.EditableTextBox.SelectionLength = selectionLength;
         }
 
         private bool FilterPredicate(object value)
