@@ -5,7 +5,7 @@ It runs in Windows system tray.
 
 ![timeclock_tray](Images/timeclock_tray.png)
 
-Just use your mouse to start or stop counting by clicking the clock icon.
+Just use your mouse to start or stop counting by clicking the clock icon. You can adjust the times if needed.
 
 ![timeclock_workreport](Images/timeclock_workreport.png)
 

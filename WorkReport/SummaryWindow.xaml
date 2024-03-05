@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TimeClock.SummaryWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Summary" Height="400" Width="660" WindowStartupLocation="CenterScreen"
+    Title="Summary" Height="440" Width="700" WindowStartupLocation="CenterScreen"
     Icon="Images/summary.ico" ResizeMode="CanMinimize">
 
     <Grid>
@@ -54,6 +54,8 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn HeaderContainerStyle="{StaticResource columnHeaderStyle}" Header="Date" Width="70"
+                                    DisplayMemberBinding="{Binding Path=FromTime, StringFormat={}\{0:d\}}"></GridViewColumn>
                     <GridViewColumn HeaderContainerStyle="{StaticResource columnHeaderStyle}" Header="From" Width="50"
                                     DisplayMemberBinding="{Binding Path=FromTime, StringFormat={}\{0:HH:mm\}}"></GridViewColumn>
                     <GridViewColumn HeaderContainerStyle="{StaticResource columnHeaderStyle}" Header="To" Width="50"
