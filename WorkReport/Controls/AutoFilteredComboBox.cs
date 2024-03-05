@@ -173,7 +173,12 @@ namespace TimeClock.Controls
             var text = this.Text;
             var selectionStart = this.EditableTextBox.SelectionStart;
             var selectionLength = this.EditableTextBox.SelectionLength;
+            
             action();
+
+            if (this.Text == text)
+                return;
+
             this.Text = text;
             this.EditableTextBox.SelectionStart = selectionStart;
             this.EditableTextBox.SelectionLength = selectionLength;
