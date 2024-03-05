@@ -191,15 +191,15 @@ namespace TimeClock.Core
 
         void CreateContextMenu()
         {
-            this.menu.MenuItems.Add(MENU_ITEM_START, menuItem_Click);
-            this.menu.MenuItems.Add(MENU_ITEM_STOP, menuItem_Click);
+            this.menu.MenuItems.Add(new MenuItem(MENU_ITEM_START, menuItem_Click) { Tag = MENU_ITEM_START });
+            this.menu.MenuItems.Add(new MenuItem(MENU_ITEM_STOP, menuItem_Click) { Tag = MENU_ITEM_STOP });
             this.menu.MenuItems.Add("-");
-            this.menu.MenuItems.Add(MENU_ITEM_COMMIT, menuItem_Click);
+            this.menu.MenuItems.Add(new MenuItem(MENU_ITEM_COMMIT, menuItem_Click) { Tag = MENU_ITEM_COMMIT });
             this.menu.MenuItems.Add("-");
-            this.menu.MenuItems.Add(MENU_ITEM_SETTINGS, menuItem_Click);
+            this.menu.MenuItems.Add(new MenuItem(MENU_ITEM_SETTINGS, menuItem_Click) { Tag = MENU_ITEM_SETTINGS });
             this.menu.MenuItems.Add("-");
-            this.menu.MenuItems.Add(MENU_ITEM_LOGOUT, menuItem_Click);
-            this.menu.MenuItems.Add(MENU_ITEM_EXIT, menuItem_Click);
+            this.menu.MenuItems.Add(new MenuItem($"{MENU_ITEM_LOGOUT} ({ItemStore.Instance.User?.FileAs ?? "Unknown"})", menuItem_Click) { Tag = MENU_ITEM_LOGOUT });
+            this.menu.MenuItems.Add(new MenuItem(MENU_ITEM_EXIT, menuItem_Click) { Tag = MENU_ITEM_EXIT });
         }
 
         void menuItem_Click(object sender, EventArgs e)
@@ -208,7 +208,7 @@ namespace TimeClock.Core
 
             if (item != null)
             {
-                switch (item.Text)
+                switch (item.Tag)
                 {
                     case MENU_ITEM_EXIT:
                         this.Quit(false);
