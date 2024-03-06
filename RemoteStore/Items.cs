@@ -12,7 +12,7 @@ namespace TimeClock.RemoteStore
         private static object itemsLock = new object();
         private static IEnumerable<BaseItem> _projectsLeads;
         private static IEnumerable<BaseItem> _workReportTypes;
-        private static Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
+        private static IEnumerable<AdditionalField> _additionalFields;
 
         /// <summary>
         /// Projects and leads altogether
@@ -61,16 +61,16 @@ namespace TimeClock.RemoteStore
         /// <summary>
         /// Gets collection of all Textbox AdditionaFields on WorkReport.
         /// </summary>
-        private static Dictionary<string, string> AdditionalFields
+        private static IEnumerable<AdditionalField> AdditionalFields
         {
             get
             {
-                if (_additionalFields.Count != 0)
+                if (_additionalFields != null)
                     return _additionalFields;
 
                 lock (itemsLock)
                 {
-                    if (_additionalFields.Count == 0)
+                    if (_additionalFields == null)
                     {
                         _additionalFields = ItemStore.Instance.GetAdditionalFields();
                     }
@@ -83,12 +83,12 @@ namespace TimeClock.RemoteStore
         /// <summary>
         /// Gets reserved field information.
         /// </summary>
-        public static KeyValuePair<string, string>? ReservedField
+        public static AdditionalField ReservedField
         {
             get
             {
-                if (AdditionalFields.Count != 0)
-                    return AdditionalFields.First();
+                if (AdditionalFields != null)
+                    return AdditionalFields.FirstOrDefault();
                 else
                     return null;
             }

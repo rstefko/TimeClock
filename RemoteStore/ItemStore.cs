@@ -100,13 +100,13 @@ namespace TimeClock.RemoteStore
         /// Gets additional fields.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> GetAdditionalFields()
+        public IEnumerable<AdditionalField> GetAdditionalFields()
         {
             JObject additionalFields = this.connection.CallMethod("GetAdditionalFields");
 
             return ((JArray)additionalFields["Data"])
                 .Where(x => x.Value<int>("Type") == 0 && x.Value<string>("ObjectTypeFolderName") == "WorkReports")
-                .ToDictionary(x => "af_" + x.Value<int>("FieldId").ToString(), y => y.Value<string>("Name"));
+                .Select(x => new AdditionalField("af_" + x.Value<int>("FieldId").ToString(), x.Value<string>("Name"), x.Value<string>("Data_EditMask")));
         }
 
         /// <summary>
@@ -310,12 +310,12 @@ namespace TimeClock.RemoteStore
             return projectsLeads.OrderBy(x => x.FileAs);
         }
 
-        public void SaveWorkReport(WorkReport item, KeyValuePair<string, string>? additionalField)
+        public void SaveWorkReport(WorkReport item, AdditionalField additionalField)
         {
             JObject additionalFields = new JObject();
             if (additionalField != null)
             {
-                additionalFields.Add(additionalField.Value.Key, item.ReservedField);
+                additionalFields.Add(additionalField.ColumnName, item.ReservedField);
             }
 
             this.connection.CallMethod("SaveWorkReport", JObject.FromObject(new

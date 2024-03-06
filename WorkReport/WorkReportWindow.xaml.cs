@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -123,6 +124,12 @@ namespace TimeClock
                 return;
             }
 
+            if (!string.IsNullOrEmpty(RemoteStore.Items.ReservedField?.EditMask) && !Regex.IsMatch(this.tbxReservedField.Text, $"^{RemoteStore.Items.ReservedField?.EditMask}$"))
+            {
+                MessageBoxHelper.Warn($"{RemoteStore.Items.ReservedField.Name} value validation failed.");
+                return;
+            }
+
             this.SaveUserSettings();
 
             this.workReport.EndEdit();
@@ -166,10 +173,14 @@ namespace TimeClock
 
         private void InitializeReservedFields()
         {
-            if (RemoteStore.Items.ReservedField.HasValue)
-                this.lblReservedField.Content = RemoteStore.Items.ReservedField.Value.Value;
+            if (RemoteStore.Items.ReservedField != null)
+            {
+                this.lblReservedField.Content = RemoteStore.Items.ReservedField.Name;
+            }
             else
+            {
                 this.tbxReservedField.IsEnabled = false;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
