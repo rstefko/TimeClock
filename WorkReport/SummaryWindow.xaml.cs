@@ -128,6 +128,7 @@ namespace TimeClock
                     catch (eWayCRM.API.Exceptions.ResponseException ex) when (ex.ReturnCode == "rcParameterError")
                     {
                         MessageBoxHelper.Warn($"Unable to save time sheet '{item.Subject}': {ex.Message}");
+                        break;
                     }
                 }
 
