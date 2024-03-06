@@ -163,9 +163,15 @@ namespace TimeClock.Controls
                     ICollectionView view = CollectionViewSource.GetDefaultView(this.ItemsSource);
                     view.Refresh();
                 }
-                this.SelectedIndex = -1;    // Prepare so arrow down selects first
-                this.IsDropDownOpen = true;
             });
+
+            // Prepare so arrow down selects first
+            this.SelectedIndex = -1;
+            this.IsDropDownOpen = true;
+
+            // Also scroll to the top, when there are more items they are scrolled to the bottom
+            var scrollViewer = this.Template.FindName("DropDownScrollViewer", this) as ScrollViewer;
+            scrollViewer?.ScrollToTop();
         }
 
         private void FreezeTextBoxState(Action action)
