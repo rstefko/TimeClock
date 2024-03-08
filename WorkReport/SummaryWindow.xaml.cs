@@ -99,7 +99,8 @@ namespace TimeClock
             window.Owner = this;
             window.WorkReport = item;
 
-            if (window.ShowDialog().Value)
+            var result = window.ShowDialog();
+            if (result.HasValue && result.Value)
             {
                 // Save workreports.
                 Core.Xml.History.SaveHistory(this.workReports);
