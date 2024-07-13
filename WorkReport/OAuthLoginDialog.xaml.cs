@@ -2,6 +2,7 @@
 using JWT;
 using JWT.Builder;
 using JWT.Serializers;
+using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,21 +63,22 @@ namespace TimeClock
                 additionalParameters = "&prompt=login";
             }
             
-            this.webBrowser.Navigate($"{baseUrl}?client_id={clientId}&scope=api&redirect_uri=http://localhost&response_type=token&login_hint={this.UserName}&login_forced={loginForced}&ui_locales=en{additionalParameters}");
+            this.webBrowser.Source = new Uri($"{baseUrl}?client_id={clientId}&scope=api&redirect_uri=http://localhost&response_type=token&login_hint={this.UserName}&login_forced={loginForced}&ui_locales=en{additionalParameters}");
         }
 
-        private void webBrowser_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
+        private void webBrowser_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
         {
-            if (e.Uri.Fragment.StartsWith("#url=") && e.Uri.Fragment.Contains("&error=1"))
+            var uri = new Uri(e.Uri);
+            if (uri.Fragment.StartsWith("#url=") && uri.Fragment.Contains("&error=1"))
             {
-                this.HandleWrongUrl(e.Uri.Fragment);
+                this.HandleWrongUrl(uri.Fragment);
                 return;
             }
 
-            if (!e.Uri.AbsoluteUri.StartsWith("http://localhost/#"))
+            if (!uri.AbsoluteUri.StartsWith("http://localhost/#"))
                 return;
             
-            var parameters = new ParameterCollection(e.Uri.Fragment.Substring(1));
+            var parameters = new ParameterCollection(uri.Fragment.Substring(1));
             this.AccessToken = parameters["access_token"];
 
             var serializer = new JsonNetSerializer();

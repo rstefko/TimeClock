@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TimeClock"
+        xmlns:local="clr-namespace:TimeClock" xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="Login" Height="508" Width="458" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <WebBrowser x:Name="webBrowser" Navigating="webBrowser_Navigating"></WebBrowser>
+        <wpf:WebView2 x:Name="webBrowser" NavigationStarting="webBrowser_NavigationStarting"></wpf:WebView2>
     </Grid>
 </Window>
