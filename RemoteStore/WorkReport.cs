@@ -12,7 +12,7 @@ namespace TimeClock.RemoteStore
     [Serializable]
     public class WorkReport : BaseItem
     {
-        private string subject;
+        private string subject, reservedField;
         private DateTime fromTime;
         private DateTime toTime;
 
@@ -69,7 +69,7 @@ namespace TimeClock.RemoteStore
 
             set
             {
-                this.subject = (value ?? string.Empty).Trim();
+                this.subject = value?.Trim() ?? string.Empty;
             }
         }
 
@@ -81,8 +81,15 @@ namespace TimeClock.RemoteStore
 
         public string ReservedField
         {
-            get;
-            set;
+            get
+            {
+                return this.reservedField;
+            }
+
+            set
+            {
+                this.reservedField = value?.Trim() ?? string.Empty;
+            }
         }
 
         [XmlIgnore]

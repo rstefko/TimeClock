@@ -126,7 +126,7 @@ namespace TimeClock
 
             if (!string.IsNullOrEmpty(this.tbxReservedField.Text) &&
                 !string.IsNullOrEmpty(RemoteStore.Items.ReservedField?.EditMask) &&
-                !Regex.IsMatch(this.tbxReservedField.Text, $"^{RemoteStore.Items.ReservedField?.EditMask}$"))
+                !Regex.IsMatch(this.tbxReservedField.Text?.Trim(), $"^{RemoteStore.Items.ReservedField?.EditMask}$"))
             {
                 MessageBoxHelper.Warn($"{RemoteStore.Items.ReservedField.Name} value validation failed.");
                 return;
