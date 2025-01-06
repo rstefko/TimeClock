@@ -1,7 +1,7 @@
 # Time Clock
 [Time Clock](http://timeclock.cz/) is a Windows application which helps users fill their time sheets in [eWay-CRM](https://www.eway-crm.com/). User in eWay-CRM needs to be active with at least API Only license assigned.
 
-You can purchase the app in [Windows Store](https://www.microsoft.com/store/apps/9NFCXHB0Z6BV). There is no trial period, see Microsoft Store [refund policy](https://support.microsoft.com/en-us/account-billing/returning-items-you-bought-from-microsoft-for-exchange-or-refund-81629012-aa4f-f48b-2394-8596f415072b).
+You download the app in [Windows Store](https://www.microsoft.com/store/apps/9NFCXHB0Z6BV).
 
 It runs in Windows system tray.
 
